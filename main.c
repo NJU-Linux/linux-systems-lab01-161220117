@@ -12,26 +12,36 @@
 
 #define maxn_dirname 1024
 #define maxn_hostname 256
+#define maxn_command 1024
+#define maxn_prompt 2048
 
 char current_dir[maxn_dirname];
 char hostname[maxn_hostname];
+char prompt[maxn_prompt];
 struct passwd* pass_wd;
+char command[maxn_command];
+
 int display_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
-		printf("[myshell]%s@%s:", pass_wd->pw_name, hostname);
-	}
+		sprintf(prompt, "[myshell]%s@%s:", pass_wd->pw_name, hostname);
+	} 
 	else{
-		printf("[myshell]%s@???:", pass_wd->pw_name);
+		sprintf(prompt, "[myshell]%s@???:", pass_wd->pw_name);
 	}
-	if(!strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
+	if( !strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
 		char temp_dir[maxn_dirname];
 		temp_dir[0] = '~';
 		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
 		strcpy(current_dir, temp_dir);
 	}
-	printf("%s$ ", current_dir);
+	sprintf(prompt+strlen(prompt), "%s$ ", current_dir);
+	printf("%s", prompt);
 	return 0;
+}
+int read_command()
+{
+	
 }
 int main(int argc, char* argv[])
 {
