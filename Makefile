@@ -1,11 +1,12 @@
 cc = gcc
-OBJ = l40ab1
+OBJ = myshell
 all :
-		@echo $(cc)  -c  ./*.c
-		@echo $(cc)  -o $(OBJ)  ./*.o  -I /usr/lib/x86_64-linux-gnu/libreadline.so  -lreadline -ltermcap  -g
-		@echo git add .
-		@echo git commit -m "compiling"
-		@# echo rm -rf  *.o
+		@$(cc) -c  ./*.c
+		@echo complete *.c
+		@$(cc) -o $(OBJ) ./*.o -I /usr/lib/x86_64-linux-gnu/libreadline.so -lreadline -ltermcap -g
+		@echo complete compiling...
+		@rm -rf *.o
+		@echo remove *.o
 clean:
-		@echo rm -rf *.o
+		rm -rf *.o
 
