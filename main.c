@@ -21,7 +21,7 @@ char prompt[maxn_prompt];
 struct passwd* pass_wd;
 char *command;
 
-int display_prompt()
+int do_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
 		sprintf(prompt, "[myshell]%s@%s:", pass_wd->pw_name, hostname);
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
 
-	display_prompt();	printf("\n");
+	do_prompt();
 	read_command();
 	return 0;
 }
