@@ -21,6 +21,17 @@ int display_prompt()
 	if(!gethostname(hostname, sizeof(hostname))){
 		printf("[myshell]%s@%s:", pass_wd->pw_name, hostname);
 	}
+	else{
+		printf("[myshell]%s@???:", pass_wd->pw_name);
+	}
+	if(!strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
+		char temp_dir[maxn_dirname];
+		temp_dir[0] = '~';
+		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
+		strcpy(current_dir, temp_dir);
+	}
+	printf("%s$ ", current_dir);
+	return 0;
 }
 int main(int argc, char* argv[])
 {
@@ -33,7 +44,6 @@ int main(int argc, char* argv[])
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
 
-	//printf("pw_name:%s\npw_passwd:%s\npw_gecos:%s\npw_dir:%s\npw_shell:%s\n", pass_wd->pw_name, pass_wd->pw_passwd, pass_wd->pw_gecos, pass_wd->pw_dir, pass_wd->pw_shell);
-	printf("current_dir:%s\n", current_dir);	
+	display_prompt();	
 	return 0;
 }
