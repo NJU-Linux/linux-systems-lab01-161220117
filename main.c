@@ -36,7 +36,7 @@ int display_prompt()
 		strcpy(current_dir, temp_dir);
 	}
 	sprintf(prompt+strlen(prompt), "%s$ ", current_dir);
-	printf("%s", prompt);
+	//printf("%s", prompt);
 	return 0;
 }
 int read_command()
