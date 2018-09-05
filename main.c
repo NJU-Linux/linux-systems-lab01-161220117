@@ -19,7 +19,7 @@ char current_dir[maxn_dirname];
 char hostname[maxn_hostname];
 char prompt[maxn_prompt];
 struct passwd* pass_wd;
-char command[maxn_command];
+char *command;
 
 int display_prompt()
 {
@@ -41,7 +41,10 @@ int display_prompt()
 }
 int read_command()
 {
-	
+	free(command);
+	command = readline(prompt);
+	printf("%s\n", command);
+	return 0;
 }
 int main(int argc, char* argv[])
 {
@@ -54,6 +57,7 @@ int main(int argc, char* argv[])
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
 
-	display_prompt();	
+	display_prompt();	printf("\n");
+	read_command();
 	return 0;
 }
