@@ -1,0 +1,12 @@
+argv[0] = ./myshell
+[myshell]tsm@tsm-virtual-machine:~$ ls -a | wc
+[46;36mthis is cmd1[0m
+
+[46;36mthis is cmd1[0m
+[46;37m-a[0m 
+[46;36mthis is cmd1[0m
+[46;37m-a[0m 
+[46;36mthis is cmd1[0m
+[46;37m-a[0m 
+[46;36mthis is cmd2[0m
+[46;37mwc[0m 

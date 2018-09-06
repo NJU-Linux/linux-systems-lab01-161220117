@@ -174,15 +174,15 @@ int read_command()
 				}
 			}
 		}
-		printf("\033[46;36mthis is cmd1\033[0m\n");
+		printf("this is cmd1\n");
 		for(int i = 0; i<p_cmd->para1_cnt; i++){
-			printf("\033[46;37m%s\033[0m ", p_cmd->para1[i]);
+			printf("%s ", p_cmd->para1[i]);
 		}
 		printf("\n");
 		if(p_cmd->para2_cnt){
-			printf("\033[46;36mthis is cmd2\033[0m\n");
+			printf("this is cmd2\n");
 			for(int i = 0; i<p_cmd->para2_cnt; i++){
-				printf("\033[46;37m%s\033[0m ", p_cmd->para2[i]);
+				printf("%s ", p_cmd->para2[i]);
 			}
 			printf("\n");
 		}
