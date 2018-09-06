@@ -86,36 +86,36 @@ int read_command()
 		int len = strlen(p_cmd->para[i]);
 		if(p_cmd->para[i][len-1] == '&'){
 			p_cmd->flag |= IF_BG;
-			para[i][len-1] = NULL;
+			p_cmd->para[i][len-1] = (char)NULL;
 		}
 		if(strstr(p_cmd->para[i], "|")){
 			p_cmd->flag |= IF_PIPE;
 			p_cmd->command2 = malloc(len);
-			if(strlen(para[i]) == 1){
-				strcpy(p_cmd->command2, para[i+1]);
+			if(strlen(p_cmd->para[i]) == 1){
+				strcpy(p_cmd->command2, p_cmd->para[i+1]);
 				p_cmd->command2_pos = i+1;
 			}
-			else if(para[i][len-1] == '|'){
-				para[i][len-1] = NULL;
-				strcpy(p_cmd->command2, para[i]);
+			else if(p_cmd->para[i][len-1] == '|'){
+				para[i][len-1] = (char)NULL;
+				strcpy(p_cmd->command2, p_cmd->para[i]);
 				p_cmd->command2_pos = i;
 			}
-			else if(para[i][0] == '|'){
-				strcpy(p_cmd->command2, para[i]+1);
+			else if(p_cmd->para[i][0] == '|'){
+				strcpy(p_cmd->command2, p_cmd->para[i]+1);
 				p_cmd->command2_pos = i;
 			}
 		}
-		else if(!strcmp(para[i], "<<") || !strcmp(para[i], "<")){
+		else if(!strcmp(p_cmd->para[i], "<<") || !strcmp(p_cmd->para[i], "<")){
 			p_cmd->flag |= IN_DI;
-			strcpy(p_cmd->in_file, para[i+1]);
+			strcpy(p_cmd->in_file, p_cmd->para[i+1]);
 		}
-		else if(!strcmp(para[i], ">>")){
+		else if(!strcmp(p_cmd->para[i], ">>")){
 			p_cmd->flag |= OUT_DI_APPEND;
-			strcpy(p_cmd->out_file, para[i+1]);
+			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
 		}
-		else if(!strcmp(para[i], ">")){
+		else if(!strcmp(p_cmd->para[i], ">")){
 			p_cmd->flag |= OUT_DI;
-			strcpy(p_cmd->out_file, para[i+1]);
+			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
 		}
 	}
 	return 0;
