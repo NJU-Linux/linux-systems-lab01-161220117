@@ -104,15 +104,22 @@ int read_command()
 			}
 			else if(p_cmd->para[i][len-1] == '|'){
 				p_cmd->para[i][len-1] = 0;
-				p_cmd->command2 = malloc(strlen(p_cmd->para[i]));
-				strcpy(p_cmd->command2, p_cmd->para[i]);
-				p_cmd->command2_pos = i;
+				p_cmd->command2 = malloc(strlen(p_cmd->para[i+1]));
+				strcpy(p_cmd->command2, p_cmd->para[i+1]);
+				p_cmd->command2_pos = i+1;
 				printf("\033[46;37m%s\033[0m", p_cmd->command2);
 			}
 			else if(p_cmd->para[i][0] == '|'){
 				p_cmd->command2 = malloc(strlen(p_cmd->para[i]));
 				strcpy(p_cmd->command2, p_cmd->para[i]+1);
 				p_cmd->command2_pos = i;
+				printf("\033[46;37m%s\033[0m", p_cmd->command2);
+			}
+			else{
+				char* tmp = strtok(p_cmd->para[i], "|");
+				tmp = strtok(NULL, "|");
+				p_cmd->command2 = malloc(strlen(tmp));
+				strcpy(p_cmd->command2, tmp);
 				printf("\033[46;37m%s\033[0m", p_cmd->command2);
 			}
 			printf("\n");
