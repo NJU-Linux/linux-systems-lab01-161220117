@@ -118,27 +118,22 @@ int read_command()
 				p_cmd->command2 = malloc(strlen(tmp));
 				strcpy(p_cmd->command2, tmp);
 			}
-			printf("\n");
 		}
 		else if(!strcmp(p_cmd->para[i], "<<") || !strcmp(p_cmd->para[i], "<")){
 			p_cmd->flag |= IN_DI;
 			p_cmd->in_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->in_file, p_cmd->para[i+1]);
-			printf("\033[46;37m%s\033[0m", p_cmd->in_file);
 		}
 		else if(!strcmp(p_cmd->para[i], ">>")){
 			p_cmd->flag |= OUT_DI_APPEND;
 			p_cmd->out_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
-			printf("\033[46;37m%s\033[0m", p_cmd->out_file);
 		}
 		else if(!strcmp(p_cmd->para[i], ">")){
 			p_cmd->flag |= OUT_DI;
 			p_cmd->out_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
-			printf("\033[46;37m%s\033[0m", p_cmd->out_file);
 		}
-		printf("\n");
 	}
 	return 0;
 }
