@@ -81,11 +81,11 @@ int read_command()
 		strcpy(p_cmd->para[p_cmd->para_count++], temp);
 		temp = strtok(NULL, " ");
 	}
-	printf("\033[46;37mthis is para:\033[0m\n");
+	/*printf("\033[46;37mthis is para:\033[0m\n");
 	for(int i = 0; i<p_cmd->para_count; i++){
 		printf("\033[46;37m%s\033[0m ", p_cmd->para[i]);
 	}
-	printf("\n");
+	printf("\n");*/
 	free(temp);
 	for(int i = 0; i<p_cmd->para_count; i++){
 		int len = strlen(p_cmd->para[i]);
