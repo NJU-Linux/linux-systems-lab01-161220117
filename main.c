@@ -163,6 +163,16 @@ int read_command()
 				p_cmd->out_file = malloc(strlen(p_cmd->line[i+1]));
 				strcpy(p_cmd->out_file, p_cmd->line[i+1]);
 			}
+			else{
+				if(is_para && which_cmd == 1){
+					p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
+				}
+				else if(is_para && which_cmd == 2){
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
+				}
+			}
 		}
 	}
 	return 0;
