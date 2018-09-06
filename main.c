@@ -15,6 +15,14 @@
 #define maxn_command 1024
 #define maxn_prompt 2048
 
+struct parsed_cmd
+{
+	int if_bg;
+	int if_redirect;
+	int if_pipe;
+	int para_count;
+	char para[64][16];
+};
 char current_dir[maxn_dirname];
 char hostname[maxn_hostname];
 char prompt[maxn_prompt];
