@@ -20,6 +20,7 @@ char hostname[maxn_hostname];
 char prompt[maxn_prompt];
 struct passwd* pass_wd;
 char *command;
+struct parsed_cmd* p_cmd;
 
 int do_prompt()
 {
@@ -39,11 +40,30 @@ int do_prompt()
 	//printf("%s", prompt);
 	return 0;
 }
+void parsed_cmd_init()
+{
+	p_cmd->if_bg = 0;
+	p_cmd->if_redirect = 0;
+	p_cmd->if_pipe = 0;
+	p_cmd->para_count = 0;
+	return;
+}
 int read_command()
 {
+	parsed_cmd_init();
 	free(command);
 	command = readline(prompt);
-	printf("%s\n", command);
+	//printf("%s\n", command);
+	char *temp = malloc(16); temp = strtok(command, " ");
+	strcpy(p_cmd->para[0], temp);
+	while(temp != NULL){
+		p_cmd->para_count++;
+		p_cmd->para[p_cmd->para_count] = strtok(NULL, " ");
+	}	
+	for(int i = 0; i<p_cmd->para_count; i++){
+		printf("%s ", p_cmd->para[i]);
+	}
+	printf("\n");
 	return 0;
 }
 int main(int argc, char* argv[])
@@ -53,6 +73,7 @@ int main(int argc, char* argv[])
 		printf("argv[%d] = %s\n", i, argv[i]);
  		} 
 	//getcwd(current_dir, sizeof(current_dir));//初始化认为在~中,当用到cd的时候再更换看当前目录
+	p_cmd = malloc(sizeof(struct parsed_cmd));
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
