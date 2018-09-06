@@ -81,12 +81,18 @@ int read_command()
 		strcpy(p_cmd->para[p_cmd->para_count++], temp);
 		temp = strtok(NULL, " ");
 	}
+	printf("\033[46;37mthis is para:\033[0m\n");
+	for(int i = 0; i<p_cmd->para_count; i++){
+		printf("\033[46;37m%s\033[0m ", p_cmd->para[i]);
+	}
+	printf("\n");
 	free(temp);
 	for(int i = 0; i<p_cmd->para_count; i++){
 		int len = strlen(p_cmd->para[i]);
 		if(p_cmd->para[i][len-1] == '&'){
 			p_cmd->flag |= IF_BG;
 			p_cmd->para[i][len-1] = 0;
+			printf("\033[46;37min &:%s\033[0m\n", p_cmd->para[i]);
 		}
 		if(strstr(p_cmd->para[i], "|")){
 			p_cmd->flag |= IF_PIPE;
