@@ -169,6 +169,7 @@ int read_command()
 					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
 				}
 				else if(is_para && which_cmd == 2){
+					printf("this cmd2para: %s\n", p_cmd->line[i]);
 					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 				}
