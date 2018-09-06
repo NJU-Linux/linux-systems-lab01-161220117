@@ -124,20 +124,21 @@ int read_command()
 			p_cmd->flag |= IN_DI;
 			p_cmd->in_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->in_file, p_cmd->para[i+1]);
-			printf("\033m[46;37m%s\033[0m", p_cmd->in_file);
+			printf("\033[46;37m%s\033[0m", p_cmd->in_file);
 		}
 		else if(!strcmp(p_cmd->para[i], ">>")){
 			p_cmd->flag |= OUT_DI_APPEND;
 			p_cmd->out_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
-			printf("\033m[46;37m%s\033[0m", p_cmd->out_file);
+			printf("\033[46;37m%s\033[0m", p_cmd->out_file);
 		}
 		else if(!strcmp(p_cmd->para[i], ">")){
 			p_cmd->flag |= OUT_DI;
 			p_cmd->out_file = malloc(strlen(p_cmd->para[i+1]));
 			strcpy(p_cmd->out_file, p_cmd->para[i+1]);
-			printf("\033m[46;37m%s\033[0m", p_cmd->out_file);
+			printf("\033[46;37m%s\033[0m", p_cmd->out_file);
 		}
+		printf("\n");
 	}
 	return 0;
 }
