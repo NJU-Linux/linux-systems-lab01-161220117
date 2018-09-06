@@ -176,12 +176,14 @@ int read_command()
 		}
 	}
 	printf("this is cmd1\n");
+	printf("%s ", p_cmd->command1);
 	for(int i = 0; i<p_cmd->para1_cnt; i++){
 		printf("%s ", p_cmd->para1[i]);
 	}
 	printf("\n");
 	if(p_cmd->para2_cnt){
 		printf("this is cmd2\n");
+		printf("%s ", p_cmd->command2);
 		for(int i = 0; i<p_cmd->para2_cnt; i++){
 			printf("%s ", p_cmd->para2[i]);
 		}
