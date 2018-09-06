@@ -21,7 +21,7 @@ struct parsed_cmd
 	int if_redirect;
 	int if_pipe;
 	int para_count;
-	char para[64][16];
+	char* para[64];
 };
 char current_dir[maxn_dirname];
 char hostname[maxn_hostname];
@@ -63,10 +63,13 @@ int read_command()
 	command = readline(prompt);
 	//printf("%s\n", command);
 	char *temp = malloc(16); temp = strtok(command, " ");
+	p_cmd->para[0] = malloc(sizeof(temp));
 	strcpy(p_cmd->para[0], temp);
 	while(temp != NULL){
 		p_cmd->para_count++;
-		p_cmd->para[p_cmd->para_count] = strtok(NULL, " ");
+		temp =strtok(NULL, " ");
+		p_cmd->para[p_cmd->para_count] = malloc(sizeof(temp));
+		strcpy(p_cmd->para[p_cmd->para_count], temp);
 	}	
 	for(int i = 0; i<p_cmd->para_count; i++){
 		printf("%s ", p_cmd->para[i]);
