@@ -64,6 +64,7 @@ int read_command()
 	//printf("%s\n", command);
 	char *temp = malloc(16); temp = strtok(command, " ");
 	p_cmd->para[0] = malloc(sizeof(temp));
+	printf("hahah\n");
 	strcpy(p_cmd->para[0], temp);
 	while(temp != NULL){
 		p_cmd->para_count++;
@@ -75,6 +76,7 @@ int read_command()
 		printf("%s ", p_cmd->para[i]);
 	}
 	printf("\n");
+	free(temp);
 	return 0;
 }
 int main(int argc, char* argv[])
