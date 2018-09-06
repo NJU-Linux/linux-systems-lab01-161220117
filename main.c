@@ -123,13 +123,13 @@ int read_command()
 				p_cmd->command2 = malloc(len);
 				if(strlen(p_cmd->line[i]) == 1){
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
-					strcpy(p_cmd->command2, p_cmd->line[i++]);
+					strcpy(p_cmd->command2, p_cmd->line[++i]);
 					which_cmd = 2;
 				}
 				else if(p_cmd->line[i][len-1] == '|'){
 					p_cmd->line[i][len-1] = 0;
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
-					strcpy(p_cmd->command2, p_cmd->line[i++]);
+					strcpy(p_cmd->command2, p_cmd->line[++i]);
 					which_cmd = 2;
 				}
 				else if(p_cmd->line[i][0] == '|'){
@@ -149,19 +149,19 @@ int read_command()
 				p_cmd->flag |= IN_DI;
 				is_para = 0;
 				p_cmd->in_file = malloc(strlen(p_cmd->line[i+1]));
-				strcpy(p_cmd->in_file, p_cmd->line[i++]);
+				strcpy(p_cmd->in_file, p_cmd->line[++i]);
 			}
 			else if(!strcmp(p_cmd->line[i], ">>")){
 				p_cmd->flag |= OUT_DI_APPEND;
 				is_para = 0;
 				p_cmd->out_file = malloc(strlen(p_cmd->line[i+1]));
-				strcpy(p_cmd->out_file, p_cmd->line[i++]);
+				strcpy(p_cmd->out_file, p_cmd->line[++i]);
 			}
 			else if(!strcmp(p_cmd->line[i], ">")){
 				p_cmd->flag |= OUT_DI;
 				is_para = 0;
 				p_cmd->out_file = malloc(strlen(p_cmd->line[i+1]));
-				strcpy(p_cmd->out_file, p_cmd->line[i++]);
+				strcpy(p_cmd->out_file, p_cmd->line[++i]);
 			}
 			else{
 				if(is_para && which_cmd == 1){
