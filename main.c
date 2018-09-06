@@ -64,8 +64,8 @@ int read_command()
 	//printf("%s\n", command);
 	char *temp = malloc(16); temp = strtok(command, " ");
 	p_cmd->para[0] = malloc(sizeof(temp));
-	printf("hahah\n");
 	strcpy(p_cmd->para[0], temp);
+	printf("this is line 68\n");
 	while(temp != NULL){
 		p_cmd->para_count++;
 		temp =strtok(NULL, " ");
