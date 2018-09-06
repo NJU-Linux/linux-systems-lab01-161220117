@@ -86,7 +86,7 @@ int read_command()
 		int len = strlen(p_cmd->para[i]);
 		if(p_cmd->para[i][len-1] == '&'){
 			p_cmd->flag |= IF_BG;
-			p_cmd->para[i][len-1] = (char)NULL;
+			p_cmd->para[i][len-1] = 0;
 		}
 		if(strstr(p_cmd->para[i], "|")){
 			p_cmd->flag |= IF_PIPE;
@@ -96,7 +96,7 @@ int read_command()
 				p_cmd->command2_pos = i+1;
 			}
 			else if(p_cmd->para[i][len-1] == '|'){
-				para[i][len-1] = (char)NULL;
+				p_cmd->para[i][len-1] = 0;
 				strcpy(p_cmd->command2, p_cmd->para[i]);
 				p_cmd->command2_pos = i;
 			}
