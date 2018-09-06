@@ -139,6 +139,8 @@ int read_command()
 				}
 				else{
 					char* tmp = strtok(p_cmd->line[i], "|");
+					p_cmd->para1[p_cmd->para1_cnt] = malloc(strlen(tmp));
+					strcpy(p_cmd->para1[p_cmd->para1_cnt++], tmp);
 					tmp = strtok(NULL, "|");
 					p_cmd->command2 = malloc(strlen(tmp));
 					strcpy(p_cmd->command2, tmp);
