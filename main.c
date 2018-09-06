@@ -63,14 +63,10 @@ int read_command()
 	command = readline(prompt);
 	//printf("%s\n", command);
 	char *temp = malloc(16); temp = strtok(command, " ");
-	p_cmd->para[0] = malloc(sizeof(temp));
-	strcpy(p_cmd->para[0], temp);
-	printf("this is line 68\n");
 	while(temp != NULL){
-		p_cmd->para_count++;
-		temp =strtok(NULL, " ");
 		p_cmd->para[p_cmd->para_count] = malloc(sizeof(temp));
-		strcpy(p_cmd->para[p_cmd->para_count], temp);
+		strcpy(p_cmd->para[p_cmd->para_count++], temp);
+		temp = strtok(NULL, " ");
 	}	
 	for(int i = 0; i<p_cmd->para_count; i++){
 		printf("%s ", p_cmd->para[i]);
