@@ -92,24 +92,30 @@ int read_command()
 		if(p_cmd->para[i][len-1] == '&'){
 			p_cmd->flag |= IF_BG;
 			p_cmd->para[i][len-1] = 0;
-			printf("\033[46;37min &:%s\033[0m\n", p_cmd->para[i]);
 		}
 		if(strstr(p_cmd->para[i], "|")){
 			p_cmd->flag |= IF_PIPE;
 			p_cmd->command2 = malloc(len);
 			if(strlen(p_cmd->para[i]) == 1){
+				p_cmd->command2 = malloc(strlen(p_cmd->para[i+1]));
 				strcpy(p_cmd->command2, p_cmd->para[i+1]);
 				p_cmd->command2_pos = i+1;
+				printf("\033[46;37m%s\033[0m", p_cmd->command2);
 			}
 			else if(p_cmd->para[i][len-1] == '|'){
 				p_cmd->para[i][len-1] = 0;
+				p_cmd->command2 = malloc(strlen(p_cmd->para[i]));
 				strcpy(p_cmd->command2, p_cmd->para[i]);
 				p_cmd->command2_pos = i;
+				printf("\033[46;37m%s\033[0m", p_cmd->command2);
 			}
 			else if(p_cmd->para[i][0] == '|'){
+				p_cmd->command2 = malloc(strlen(p_cmd->para[i]));
 				strcpy(p_cmd->command2, p_cmd->para[i]+1);
 				p_cmd->command2_pos = i;
+				printf("\033[46;37m%s\033[0m", p_cmd->command2);
 			}
+			printf("\n");
 		}
 		else if(!strcmp(p_cmd->para[i], "<<") || !strcmp(p_cmd->para[i], "<")){
 			p_cmd->flag |= IN_DI;
