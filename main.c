@@ -191,6 +191,12 @@ int read_command()
 		}
 		printf("\n");
 	}
+	if(p_cmd->in_file){
+		printf("in file :%s\n", p_cmd->in_file);
+	}
+	else if(p_cmd->out_file){
+		printf("out file:%s\n", p_cmd->out_file);
+	}
 	return 0;
 }
 void do_command()
