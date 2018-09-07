@@ -226,16 +226,16 @@ void do_command()
 			dup2(pipefd[1], STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & OUT_DI){
-			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT);
+			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT, 0666);
 			dup2(out_fd, STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & OUT_DI_APPEND){
-			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRUNC);
+			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0666);
 			dup2(out_fd, STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & IN_DI){
 			//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
-			in_fd = open(p_cmd->in_file, O_RDONLY);
+			in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 			dup2(in_fd, STDIN_FILENO);
 		}
 		execvp(p_cmd->command1, p_cmd->para1);
