@@ -8,6 +8,7 @@
 #include<string.h>
 #include<unistd.h>
 #include<sys/wait.h>
+#include<sys/stat.h>
 
 #include"myshell.h"
 
@@ -232,8 +233,8 @@ void do_command()
 			dup2(out_fd, STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & IN_DI){
-			//in_fd = open(info.in_file, O_CREATE|O_RDONLY)
-			in_fd = open(info.in_file, O_RDONLY);
+			//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
+			in_fd = open(p_cmd->in_file, O_RDONLY);
 			dup2(in_fd, STDIN_FILENO);
 		}
 		execvp(p_cmd->command1, p_cmd->para1);
