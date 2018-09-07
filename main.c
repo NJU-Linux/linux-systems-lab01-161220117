@@ -230,7 +230,7 @@ void do_command()
 			dup2(out_fd, STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & OUT_DI_APPEND){
-			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRuNC);
+			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRUNC);
 			dup2(out_fd, STDOUT_FILENO);
 		}
 		else if(p_cmd->flag & IN_DI){
