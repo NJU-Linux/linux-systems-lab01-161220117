@@ -7,6 +7,7 @@
 #include<pwd.h>
 #include<string.h>
 #include<unistd.h>
+#include<sys/wait.h>
 
 #include"myshell.h"
 
@@ -207,6 +208,7 @@ void do_command()
 {
 	int pipefd[2] = {0, 0};
 	int in_fd = -1; int out_fd = -1;
+	int status;
 	if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
 		if(pipe(pipefd)){
 			printf("\033[41;37mERROR when pipe!\033[0m\n");
@@ -216,11 +218,46 @@ void do_command()
 	pid_t pid = fork();
 	/*子进程*/
 	if(pid == 0){
+		if(p_cmd->flag & IF_PIPE){
+			//子进程command1关读口0把写口与输出关联
+			close(pipefd[0]);
+			dup2(fd[1], STDOUT_FILENO);
+		}
+		else if(p_cmd->flag & OUT_DI){
+			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT);
+			dup2(out_fd, STDOUT_FILENO);
+		}
+		else if(p_cmd->flag & OUT_DI_APPEND){
+			out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRuNC);
+			dup2(out_fd, STDOUT_FILENO);
+		}
+		else if(p_cmd->flag & IN_DI){
+			//in_fd = open(info.in_file, O_CREATE|O_RDONLY)
+			in_fd = open(info.in_file, O_RDONLY);
+			dup2(in_fd, STDIN_FILENO);
+		}
 		execvp(p_cmd->command1, p_cmd->para1);
 	}
 	/*父进程*/
 	else{
-		sleep(1);
+		if(p_cmd->flag & IF_PIPE){
+			//子进程2command2关写口1把读口与输出关联
+			pid_t pid2 = fork();
+			if(pid2 == 0){
+				close(pipefd[1]);
+				dup2(fd[0], STDIN_FILENO);
+				execvp(p_cmd->command2, p_cmd->para2);
+			}
+			else{
+				waitpid(pid2, &status, 0);
+			}
+		}
+		/*else if(p_cmd->flag & IF_BG){
+			
+		}*/
+		else{
+			waitpid(pid, &status, 0);
+		}
 		exit(0);	
 	}
 }
