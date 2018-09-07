@@ -177,6 +177,7 @@ int read_command()
 			}
 		}
 	}
+#ifdef DEBUG
 	printf("this is cmd1\n");
 	printf("%s ", p_cmd->command1);
 	for(int i = 0; i<p_cmd->para1_cnt; i++){
@@ -197,6 +198,7 @@ int read_command()
 	else if(p_cmd->out_file){
 		printf("out file:%s\n", p_cmd->out_file);
 	}
+#endif
 	return 0;
 }
 void do_command()
