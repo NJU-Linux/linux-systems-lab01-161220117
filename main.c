@@ -10,6 +10,8 @@
 
 #include"myshell.h"
 
+#define DEBUG
+
 #define maxn_dirname 1024
 #define maxn_hostname 256
 #define maxn_command 1024
