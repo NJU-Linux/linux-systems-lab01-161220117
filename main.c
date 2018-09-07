@@ -206,8 +206,23 @@ int read_command()
 void do_command()
 {
 	int pipefd[2] = {0, 0};
-
-
+	int in_fd = -1; int out_fd = -1;
+	if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
+		if(pipe(pipefd)){
+			printf("\033[41;37mERROR when pipe!\033[0m\n");
+			exit(1);
+		}
+	}
+	pid_t pid = fork();
+	/*子进程*/
+	if(pid == 0){
+		execvp(p_cmd->command1, p_cmd->para1);
+	}
+	/*父进程*/
+	else{
+		sleep(1);
+		exit(0);	
+	}
 }
 int main(int argc, char* argv[])
 {
@@ -223,5 +238,6 @@ int main(int argc, char* argv[])
 
 	do_prompt();
 	read_command();
+	do_command();
 	return 0;
 }
