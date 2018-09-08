@@ -326,7 +326,7 @@ void history_command()
 		else{
 			char* search_entity = malloc(strlen(p_cmd->command1));
 			strcpy(search_entity, p_cmd->command1+1);
-			HIST_ENTRY* entry = histr[0];
+			HIST_ENTRY* entry = histr[1];
 			printf("entry:%s\n", entry->line);
 			int i = 1;
 			while(histr[i]!=NULL){
