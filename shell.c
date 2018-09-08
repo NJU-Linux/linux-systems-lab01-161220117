@@ -261,13 +261,14 @@ void cd_command()
 }
 void history_command()
 {
-	HIST_ENTRY** histr = history_list();
+	HIST_ENTRY** histr;
+	histr = history_list();
 	if(!strcmp(p_cmd->command1, "history")){
 		if(!p_cmd->para1[1]){
 			int i = history_length-100;
 			while(histr[i] != NULL && i<= history_length){
-				printf("hahaha\n");
-				printf("%d: %s\n", i, histr[i]->line);
+				
+				printf("%d: %s\n", i, histr[i]->line);printf("hahaha\n");
 				i++;
 			}
 		}
