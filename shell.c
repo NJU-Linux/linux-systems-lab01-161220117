@@ -232,10 +232,10 @@ void do_command()
 		printf("\033[42;37mthis is my simple shell\033[0m\n");
 		printf("\033[42;37mnow support simple cmd, redirection in one process, pipe between two processes\033[0m\n");
 	}
-	else if(!strcmp(p_cmd->command1, "cd")){
+	/*else if(!strcmp(p_cmd->command1, "cd")){
 		cd_command();	
-	}
-	else if({	
+	}*/
+	else if{	
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
 			if(pipe(pipefd)){
 				printf("\033[41;37mERROR when pipe!\033[0m\n");
