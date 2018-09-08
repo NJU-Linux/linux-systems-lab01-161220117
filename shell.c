@@ -287,7 +287,7 @@ void do_command()
 			}
 			exit(0);	
 		}
-	}}
+	}
 }
 int main(int argc, char* argv[])
 {
