@@ -376,6 +376,7 @@ void do_command()
 				dup2(in_fd, STDIN_FILENO);
 			}
 			add_history(command);
+			printf("command:%s\n", command);
 			write_history(NULL);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
