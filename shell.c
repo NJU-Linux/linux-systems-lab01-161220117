@@ -210,7 +210,9 @@ void cd_command()
 {
 	char* dest_dir;
 	if(p_cmd->para1[0]){
+		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
 		char* home_dir = NULL;
+		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
 		printf("para1:%s\n", p_cmd->para1[0]);
 		if(!strncmp(p_cmd->para1[0], "~", 1)){
 			home_dir = malloc(strlen(pass_wd->pw_dir));
@@ -237,9 +239,8 @@ void cd_command()
 			exit(1);
 		}
 		printf("pwd:%s\n", pwd);
-#endif
 		free(pwd);
-		
+#endif
 		if(home_dir)
 			free(home_dir);
 	}
@@ -289,6 +290,7 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
+			printf("para1:%s\n", p_cmd->para1[0]);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
 		/*父进程*/
