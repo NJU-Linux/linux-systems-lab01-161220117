@@ -1,7 +1,7 @@
 cc = gcc
 OBJ = njush
 all :
-		@$(cc) -c  ./*.c
+		@$(cc) -c ./*.c
 		@echo complete *.c
 		@$(cc) -o $(OBJ) ./*.o -I /usr/lib/x86_64-linux-gnu/libreadline.so -lreadline -ltermcap -g
 		@echo complete compiling...
