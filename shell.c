@@ -81,7 +81,7 @@ void parsed_cmd_init()
 	p_cmd->para1_cnt = 0; p_cmd->para2_cnt = 0;
 	return;
 }
-int read_command()	//最后一个参数后面要NULL才可以
+int read_command()	//最后一个参数后面要NULL才可以,第一个参数要直接是指令才行
 {
 	parsed_cmd_init();
 	free(command);
@@ -109,6 +109,8 @@ int read_command()	//最后一个参数后面要NULL才可以
 				p_cmd->line[0][len-1] = 0;
 			}
 			strcpy(p_cmd->command1, p_cmd->line[0]);
+			p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+			strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[0]);
 		}
 		else{
 			if(p_cmd->line[i][len-1] == '&'){
@@ -128,18 +130,24 @@ int read_command()	//最后一个参数后面要NULL才可以
 				p_cmd->command2 = malloc(len);
 				if(strlen(p_cmd->line[i]) == 1){
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));
 					strcpy(p_cmd->command2, p_cmd->line[++i]);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 					which_cmd = 2;
 				}
 				else if(p_cmd->line[i][len-1] == '|'){
 					p_cmd->line[i][len-1] = 0;
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));					
 					strcpy(p_cmd->command2, p_cmd->line[++i]);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 					which_cmd = 2;
 				}
 				else if(p_cmd->line[i][0] == '|'){
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i]));
 					strcpy(p_cmd->command2, p_cmd->line[i]+1);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]+1);
 					which_cmd = 2;
 				}
 				else{
@@ -148,7 +156,9 @@ int read_command()	//最后一个参数后面要NULL才可以
 					strcpy(p_cmd->para1[p_cmd->para1_cnt++], tmp);
 					tmp = strtok(NULL, "|");
 					p_cmd->command2 = malloc(strlen(tmp));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(tmp));
 					strcpy(p_cmd->command2, tmp);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], tmp);
 					which_cmd = 2;
 				}
 			}
@@ -272,7 +282,6 @@ void do_command()
 		pid_t pid = fork();
 		/*子进程*/
 		if(pid == 0){
-			printf("before execvp: para1: %s %s\n", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt]);
 			if(p_cmd->flag & IF_PIPE){
 				//子进程command1关读口0把写口与输出关联
 				close(pipefd[0]);
