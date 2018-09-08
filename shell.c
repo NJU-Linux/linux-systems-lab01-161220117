@@ -211,7 +211,7 @@ void cd_command()
 	char* dest_dir;
 	if(p_cmd->para1[0]){
 		char* home_dir;
-		if(!strncmp(p_cmd->para1[0], "~", 1)){
+		if(!strncmp(p_cmd->para1[0], "~", 1)){printf("hhaha\n");	
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
 		}
@@ -220,7 +220,7 @@ void cd_command()
 			strcpy(dest_dir, home_dir);
 			strcat(dest_dir, p_cmd->para1[0]+1);
 		}
-		else{printf("hhaha\n");	
+		else{
 			strcpy(dest_dir, p_cmd->para1[0]);printf("hhaha111\n");
 		}
 		int ret = chdir(dest_dir);
