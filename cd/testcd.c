@@ -4,7 +4,7 @@
 
 int main()
 {
-	char *s = "..";
+	char *s = ".";
 	char *pwd = malloc(64);
 	if(!getcwd(pwd,64)){
 		perror("getcwd error\n");
