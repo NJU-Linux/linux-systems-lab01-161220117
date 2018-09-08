@@ -217,8 +217,13 @@ void cd_command()
 			printf("home_dir:%s\n", home_dir);
 		}	
 		dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
-		strcpy(dest_dir, home_dir);
-		strcat(dest_dir, p_cmd->para1[0]);
+		if(home_dir){
+			strcpy(dest_dir, home_dir);
+			strcat(dest_dir, p_cmd->para1[0]+1);
+		}
+		else{
+			strcpy(dest_dir, p_cmd->para1[0]);
+		}
 		printf("dest_dir:%s\n", dest_dir);
 		/*int ret = chdir(dest_dir);
 		if(ret){
