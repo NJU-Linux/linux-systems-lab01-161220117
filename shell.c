@@ -290,6 +290,7 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
+			printf("hahahahaha\n");
 			printf("before execvp: para1: %s %s", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt-1]);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
