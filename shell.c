@@ -288,6 +288,7 @@ void history_command()
 			}
 			else if((int)p_cmd->para1[1][0] > 47 && (int)p_cmd->para1[1][0] < 48){
 				int cnt = atoi(p_cmd->para1[1]);
+				printf("cnt:%d\n", cnt);
 				int i = 0;
 				if(history_length > cnt){
 					i = history_length - cnt;
