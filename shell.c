@@ -216,12 +216,12 @@ void cd_command()
 			strcpy(home_dir, pass_wd->pw_dir);
 		}
 		if(home_dir){
-			dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir) + 1);
+			dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
 			strcpy(dest_dir, home_dir);
 			strcat(dest_dir, p_cmd->para1[0]+1);
 		}
 		else{
-			dest_dir = malloc(strlen(p_cmd->para1[0]) + 1);
+			dest_dir = malloc(strlen(p_cmd->para1[0]));
 			strcpy(dest_dir, p_cmd->para1[0]);
 		}
 		int ret = chdir(dest_dir);
@@ -238,7 +238,8 @@ void cd_command()
 		printf("pwd:%s\n", pwd);
 #endif
 		free(pwd);
-		free(home_dir);
+		if(home_dir)
+			free(home_dir);
 	}
 	return;
 }
