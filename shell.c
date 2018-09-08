@@ -311,7 +311,7 @@ void history_command()
 		if(!strcmp(p_cmd->command1, "!!")){
 			HIST_ENTRY* entry = histr[0];
 			int i = 1;
-			while(histr[i]!=NULL){
+			while(histr[i+1]!=NULL){
 				entry = histr[i++];
 			}
 			char* his_cmd = entry->line;
