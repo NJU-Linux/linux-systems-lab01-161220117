@@ -182,8 +182,6 @@ int read_command()	//最后一个参数后面要NULL才可以
 			}
 		}
 	}
-	printf("finally para1:%s\n", p_cmd->para1[p_cmd->para1_cnt]);
-	//p_cmd->para1[para1_cnt] = NULL; p_cmd->para2[para2_cnt] = NULL;
 #ifdef DEBUG
 	printf("this is cmd1\n");
 	printf("%s ", p_cmd->command1);
@@ -292,6 +290,7 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
+			printf("before execvp: para1: %s %s", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt-1]);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
 		/*父进程*/
