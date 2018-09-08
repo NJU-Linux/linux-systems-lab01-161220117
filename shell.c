@@ -272,6 +272,7 @@ void do_command()
 		pid_t pid = fork();
 		/*子进程*/
 		if(pid == 0){
+			printf("before execvp: para1: %s %s", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt-1]);
 			if(p_cmd->flag & IF_PIPE){
 				//子进程command1关读口0把写口与输出关联
 				close(pipefd[0]);
@@ -290,7 +291,7 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
-			//execvp(p_cmd->command1, p_cmd->para1);
+			execvp(p_cmd->command1, p_cmd->para1);
 		}
 		/*父进程*/
 		else{
