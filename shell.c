@@ -228,15 +228,12 @@ void cd_command()
 			printf("\033[41;37mchange directory is failed!\033[0m\n");
 		}
 		strcpy(current_dir, dest_dir);
-#ifdef DEBUG
-		printf("current_dir:%s\n", current_dir);
 		char* pwd = malloc(64);
 		if(!getcwd(pwd, 64)){
 			perror("getcwd error\n");
 			exit(1);
 		}
 		printf("pwd:%s\n", pwd);
-#endif
 		free(pwd);
 		free(home_dir);
 	}
