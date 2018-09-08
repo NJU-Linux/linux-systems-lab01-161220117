@@ -315,7 +315,10 @@ void history_command()
 				entry = histr[i++];
 			}
 			char* his_cmd = entry->line;
-			printf("his_cmd:%s\n", his_cmd);
+			free(command);
+			command = malloc(strlen(his_cmd));
+			parse_command();
+			//printf("his_cmd:%s\n", his_cmd);
 			//TODO 把命令化为剩下的继续执行
 		}
 		else{
@@ -349,10 +352,18 @@ void do_command()
 	else if(!strcmp(p_cmd->command1, "cd")){
 		cd_command();	
 	}
-	else if(!strcmp(p_cmd->command1, "history") || !strncmp(p_cmd->command1, "!", 1)){
+	else if(!strcmp(p_cmd->command1, "history")){
 		history_command();
 	}
+	else if(!strncmp(p_cmd->command1, "!", 1)){
+		if(strcmp(p_cmd->command1, "!!")){	//!string的情况
+			history_command();
+		}
+	}
 	else{	
+		if(!strcmp(p_cmd->command1, "!!")){
+			history_command();
+		}
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
 			if(pipe(pipefd)){
 				printf("\033[41;37mERROR when pipe!\033[0m\n");
