@@ -44,7 +44,7 @@ char prompt[maxn_prompt];
 struct passwd* pass_wd;
 char *command;
 struct parsed_cmd* p_cmd;
-HIST_ENTRY** histr;
+
 int history_length;
 int history_base;
 
@@ -261,10 +261,9 @@ void cd_command()
 }
 void history_command()
 {
-	histr = history_list();
+	HIST_ENTRY** histr = history_list();
 	if(!strcmp(p_cmd->command1, "history")){
 		if(!p_cmd->para1[1]){
-			printf("hahah\n");
 			int i = history_length-100;
 			while(histr[i] != NULL && i<= history_length){
 				printf("%d: %s\n", i, histr[i]->line);
