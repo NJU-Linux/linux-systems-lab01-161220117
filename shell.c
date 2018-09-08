@@ -331,6 +331,7 @@ void history_command()
 			int i = 1;
 			while(histr[i]!=NULL){
 				entry = histr[i++];
+				printf("entry:%s\n", entry->line);
 			}
 			int offset = where_history();
 			history_set_pos(offset);
