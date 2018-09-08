@@ -352,13 +352,8 @@ void do_command()
 	else if(!strcmp(p_cmd->command1, "cd")){
 		cd_command();	
 	}
-	else if(!strcmp(p_cmd->command1, "history")){
+	else if(!strcmp(p_cmd->command1, "history") || (!strncmp(p_cmd->command1, "!", 1) && strcmp(p_cmd->command1, "!!"))){
 		history_command();
-	}
-	else if(!strncmp(p_cmd->command1, "!", 1)){
-		if(strcmp(p_cmd->command1, "!!")){	//!string的情况
-			history_command();
-		}
 	}
 	else{	
 		if(!strcmp(p_cmd->command1, "!!")){
