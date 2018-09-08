@@ -238,7 +238,6 @@ void cd_command()
 		}
 		printf("pwd:%s\n", pwd);
 #endif
-		printf("hhahah\n");
 		free(pwd);
 		printf("hhahah\n");
 		if(home_dir)
