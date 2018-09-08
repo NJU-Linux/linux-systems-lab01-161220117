@@ -389,7 +389,7 @@ void do_command()
 			else{
 				waitpid(pid, &status, 0);
 			}
-			exit(0);	
+			//exit(0);	
 		}
 	}
 }
