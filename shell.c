@@ -265,10 +265,16 @@ void history_command()
 	histr = history_list();
 	if(!strcmp(p_cmd->command1, "history")){
 		if(!p_cmd->para1[1]){
-			int i = history_length-100;
+			int i = 0;
+			if(history_length > 100){
+				i = history_length - 100;
+			}
+			else{
+				i = 1;
+			}
 			while(histr[i] != NULL && i<= history_length){
 				
-				printf("%d: %s\n", i, histr[i]->line);printf("hahaha\n");
+				printf("%d: %s\n", i, histr[i]->line);
 				i++;
 			}
 		}
