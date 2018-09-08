@@ -214,7 +214,6 @@ void cd_command()
 		if(!strncmp(p_cmd->para1[0], "~", 1)){
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
-			printf("home_dir:%s\n", home_dir);
 		}	
 		dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
 		if(home_dir){
@@ -224,12 +223,19 @@ void cd_command()
 		else{
 			strcpy(dest_dir, p_cmd->para1[0]);
 		}
-		printf("dest_dir:%s\n", dest_dir);
-		/*int ret = chdir(dest_dir);
+		int ret = chdir(dest_dir);
 		if(ret){
 			printf("\033[41;37mchange directory is failed!\033[0m\n");
-		}*/
-		//strcpy(dest_dir, current_dir);
+		}
+		strcpy(current_dir, dest_dir);
+		char* pwd = malloc(64);
+		if(!getcwd(pwd, 64)){
+			perror("getcwd error\n");
+			exit(1);
+		}
+		printf("pwd:%s\n", pwd);
+		free(pwd);
+		free(home_dir);
 	}
 	return;
 }
