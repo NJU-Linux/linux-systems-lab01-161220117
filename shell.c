@@ -334,6 +334,7 @@ void do_command()
 	}
 	else if(!strcmp(p_cmd->command1, "history") || !strncmp(p_cmd->command1, "!", 1)){
 		add_history(command);
+		printf("hahha\n");
 		write_history(NULL);
 		history_command();
 	}
