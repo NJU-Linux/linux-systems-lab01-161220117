@@ -359,7 +359,6 @@ void do_command()
 	}
 	else{	
 		if(!strcmp(p_cmd->command1, "!!")){
-			printf("hhaha\n");
 			history_command();
 		}
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
