@@ -235,7 +235,7 @@ void do_command()
 	else if(!strcmp(p_cmd->command1, "cd")){
 		cd_command();	
 	}
-	//else if{	
+	else{	
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
 			if(pipe(pipefd)){
 				printf("\033[41;37mERROR when pipe!\033[0m\n");
@@ -287,7 +287,7 @@ void do_command()
 			}
 			exit(0);	
 		}
-	//}
+	}
 }
 int main(int argc, char* argv[])
 {
