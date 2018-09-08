@@ -215,6 +215,7 @@ void cd_command()
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
 		}	
+		printf("hhaha\n");
 		dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
 		if(home_dir){
 			strcpy(dest_dir, home_dir);
