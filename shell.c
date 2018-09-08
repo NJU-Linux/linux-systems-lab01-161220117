@@ -84,13 +84,8 @@ void parsed_cmd_init()
 	p_cmd->para1_cnt = 0; p_cmd->para2_cnt = 0;
 	return;
 }
-int read_command()	//最后一个参数后面要NULL才可以,第一个参数要直接是指令才行
+void parse_command()
 {
-	parsed_cmd_init();
-	free(command);
-	command = readline(prompt);
-	add_history(command);
-	write_history(NULL);
 	char *temp = malloc(16); temp = strtok(command, " ");
 	while(temp != NULL){
 		p_cmd->line[p_cmd->para_count] = malloc(sizeof(temp));
@@ -219,6 +214,144 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 		printf("out file:%s\n", p_cmd->out_file);
 	}
 #endif
+	return;
+}
+int read_command()	//最后一个参数后面要NULL才可以,第一个参数要直接是指令才行
+{
+	parsed_cmd_init();
+	free(command);
+	command = readline(prompt);
+	add_history(command);
+	write_history(NULL);
+	parse_command();
+/*	char *temp = malloc(16); temp = strtok(command, " ");
+	while(temp != NULL){
+		p_cmd->line[p_cmd->para_count] = malloc(sizeof(temp));
+		strcpy(p_cmd->line[p_cmd->para_count++], temp);
+		temp = strtok(NULL, " ");
+	}*/
+	/*printf("\033[46;37mthis is para:\033[0m\n");
+	for(int i = 0; i<p_cmd->para_count; i++){
+		printf("\033[46;37m%s\033[0m ", p_cmd->para[i]);
+	}
+	printf("\n");*/
+/*	free(temp);
+	int which_cmd = 1;
+	int is_para = 1;
+	for(int i = 0; i<p_cmd->para_count; i++){
+		int len = strlen(p_cmd->line[i]);
+		if(!i){
+			p_cmd->command1 = malloc(len);
+			if(p_cmd->line[0][len-1] == '&' && is_para){
+				p_cmd->flag |= IF_BG;
+				p_cmd->line[0][len-1] = 0;
+			}
+			strcpy(p_cmd->command1, p_cmd->line[0]);
+			p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+			strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[0]);
+		}
+		else{
+			if(p_cmd->line[i][len-1] == '&'){
+				p_cmd->flag |= IF_BG;
+				p_cmd->line[i][len-1] = 0;
+				if(which_cmd == 1){
+					p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
+				}
+				else{
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
+				}
+			}
+			if(strstr(p_cmd->line[i], "|")){
+				p_cmd->flag |= IF_PIPE;
+				p_cmd->command2 = malloc(len);
+				if(strlen(p_cmd->line[i]) == 1){
+					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));
+					strcpy(p_cmd->command2, p_cmd->line[++i]);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
+					which_cmd = 2;
+				}
+				else if(p_cmd->line[i][len-1] == '|'){
+					p_cmd->line[i][len-1] = 0;
+					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));					
+					strcpy(p_cmd->command2, p_cmd->line[++i]);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
+					which_cmd = 2;
+				}
+				else if(p_cmd->line[i][0] == '|'){
+					p_cmd->command2 = malloc(strlen(p_cmd->line[i]));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i]));
+					strcpy(p_cmd->command2, p_cmd->line[i]+1);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]+1);
+					which_cmd = 2;
+				}
+				else{
+					char* tmp = strtok(p_cmd->line[i], "|");
+					p_cmd->para1[p_cmd->para1_cnt] = malloc(strlen(tmp));
+					strcpy(p_cmd->para1[p_cmd->para1_cnt++], tmp);
+					tmp = strtok(NULL, "|");
+					p_cmd->command2 = malloc(strlen(tmp));
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(tmp));
+					strcpy(p_cmd->command2, tmp);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], tmp);
+					which_cmd = 2;
+				}
+			}
+			else if(!strcmp(p_cmd->line[i], "<<") || !strcmp(p_cmd->line[i], "<")){
+				p_cmd->flag |= IN_DI;
+				is_para = 0;
+				p_cmd->in_file = malloc(strlen(p_cmd->line[i+1]));
+				strcpy(p_cmd->in_file, p_cmd->line[++i]);
+			}
+			else if(!strcmp(p_cmd->line[i], ">>")){
+				p_cmd->flag |= OUT_DI_APPEND;
+				is_para = 0;
+				p_cmd->out_file = malloc(strlen(p_cmd->line[i+1]));
+				strcpy(p_cmd->out_file, p_cmd->line[++i]);
+			}
+			else if(!strcmp(p_cmd->line[i], ">")){
+				p_cmd->flag |= OUT_DI;
+				is_para = 0;
+				p_cmd->out_file = malloc(strlen(p_cmd->line[i+1]));
+				strcpy(p_cmd->out_file, p_cmd->line[++i]);
+			}
+			else{
+				if(is_para && which_cmd == 1){
+					p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
+				}
+				else if(is_para && which_cmd == 2){
+					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
+					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
+				}
+			}
+		}
+	}
+#ifdef DEBUG
+	printf("this is cmd1\n");
+	printf("%s ", p_cmd->command1);
+	for(int i = 0; i<p_cmd->para1_cnt; i++){
+		printf("%s ", p_cmd->para1[i]);
+	}
+	printf("\n");
+	if(p_cmd->para2_cnt){
+		printf("this is cmd2\n");
+		printf("%s ", p_cmd->command2);
+		for(int i = 0; i<p_cmd->para2_cnt; i++){
+			printf("%s ", p_cmd->para2[i]);
+		}
+		printf("\n");
+	}
+	if(p_cmd->in_file){
+		printf("in file :%s\n", p_cmd->in_file);
+	}
+	else if(p_cmd->out_file){
+		printf("out file:%s\n", p_cmd->out_file);
+	}
+#endif*/
 	return 0;
 }
 void cd_command()
@@ -288,7 +421,6 @@ void history_command()
 			}
 			else if(p_cmd->para1[1][0] > 47 && p_cmd->para1[1][0] < 58){
 				int cnt = atoi(p_cmd->para1[1]);
-				printf("cnt:%d\n", cnt);
 				int i = 0;
 				if(history_length > cnt){
 					i = history_length - cnt;
