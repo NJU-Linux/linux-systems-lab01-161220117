@@ -44,6 +44,9 @@ char prompt[maxn_prompt];
 struct passwd* pass_wd;
 char *command;
 struct parsed_cmd* p_cmd;
+HIST_ENTRY** histr;
+int history_length;
+int history_base;
 
 int do_prompt()
 {
@@ -219,23 +222,23 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 void cd_command()
 {
 	char* dest_dir;
-	if(p_cmd->para1[0]){
+	if(p_cmd->para1[1]){
 		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
 		char* home_dir = NULL;
 		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
-		printf("para1:%s\n", p_cmd->para1[0]);
-		if(!strncmp(p_cmd->para1[0], "~", 1)){
+		printf("para1:%s\n", p_cmd->para1[1]);
+		if(!strncmp(p_cmd->para1[1], "~", 1)){
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
 		}
 		if(home_dir){
-			dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
+			dest_dir = malloc(strlen(p_cmd->para1[1]) + strlen(home_dir));
 			strcpy(dest_dir, home_dir);
-			strcat(dest_dir, p_cmd->para1[0]+1);
+			strcat(dest_dir, p_cmd->para1[1]+1);
 		}
 		else{
-			dest_dir = malloc(strlen(p_cmd->para1[0]));
-			strcpy(dest_dir, p_cmd->para1[0]);
+			dest_dir = malloc(strlen(p_cmd->para1[1]));
+			strcpy(dest_dir, p_cmd->para1[1]);
 		}
 		int ret = chdir(dest_dir);
 		if(ret){
@@ -256,21 +259,83 @@ void cd_command()
 	}
 	return;
 }
+void history_command()
+{
+	histr = history_list();
+	if(!strcmp(p_cmd->command1, "history")){
+		if(!p_cmd->para1[1]){
+			int i = history_length-100;
+			while(histr[i] != NULL && i<= history_length){
+				printf("%d: %s\n", i, histr[i]->line);
+			}
+		}
+		else{
+			if(!strcmp(p_cmd->para1[1], "-c")){
+				clear_history();
+				if(write_history(NULL)){
+					perror("write_history error\n");
+				}
+			}
+			else if((int)p_cmd->para1[1][0] > 47 && (int)p_cmd->para1[1][0] < 48){
+				int cnt = atoi(p_cmd->para1[1]);
+				int i = history_length - cnt;
+				while(histr[i] != NULL && i <= history_length){
+					printf("%d: %s\n", i, histr[i]->line);
+				}
+			}
+		}	
+	}
+	else{
+		if(!strcmp(p_cmd->command1, "!!")){
+			HIST_ENTRY* entry = histr[0];
+			int i = 1;
+			while(histr[i]!=NULL){
+				entry = histr[i++];
+			}
+			char* his_cmd = entry->line;
+			//TODO 把命令化为剩下的继续执行
+		}
+		else{
+			char* search_entity = malloc(strlen(p_cmd->command1));
+			strcpy(search_entity, p_cmd->command1+1);
+			HIST_ENTRY* entry = histr[0];
+			int i = 1;
+			while(histr[i]!=NULL){
+				entry = histr[i++];
+			}
+			int offset = where_history();
+			history_set_pos(offset);
+			history_search_prefix (search_entity, -1);
+		}
+	}
+	return;
+}
 void do_command()
 {
 	int pipefd[2] = {0, 0};
 	int in_fd = -1; int out_fd = -1;
 	int status;
 	if(!strcmp(p_cmd->command1, "exit")){
+		add_history(command);
+		write_history(NULL);
 		exit(0);
 	}
 	else if(!strcmp(p_cmd->command1, "help")){
+		add_history(command);
+		write_history(NULL);
 		printf("\033[42;37mVersion:0.0.1\033[0m");
 		printf("\033[42;37mthis is my simple shell\033[0m\n");
 		printf("\033[42;37mnow support simple cmd, redirection in one process, pipe between two processes\033[0m\n");
 	}
 	else if(!strcmp(p_cmd->command1, "cd")){
+		add_history(command);
+		write_history(NULL);	
 		cd_command();	
+	}
+	else if(!strcmp(p_cmd->command1, "history") || !strncmp(p_cmd->command1, "!", 1)){
+		add_history(command);
+		write_history(NULL);
+		history_command();
 	}
 	else{	
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
@@ -300,6 +365,8 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
+			add_history(command);
+			write_history(NULL);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
 		/*父进程*/
@@ -337,9 +404,12 @@ int main(int argc, char* argv[])
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
+	read_history(NULL);
+	while(1){
+		do_prompt();
+		read_command();
+		do_command();	
+	}
 
-	do_prompt();
-	read_command();
-	do_command();
 	return 0;
 }
