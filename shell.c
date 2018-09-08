@@ -240,8 +240,8 @@ void cd_command()
 #endif
 		free(pwd);
 		printf("hhahah\n");
-		if(home_dir)
-			free(home_dir);
+		//if(home_dir)
+		//	free(home_dir);
 	}
 	return;
 }
