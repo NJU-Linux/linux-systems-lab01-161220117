@@ -225,7 +225,7 @@ void cd_command()
 		}
 		int ret = chdir(dest_dir);
 		if(ret){
-			printf("\033[41;37mchange directory is failed!\033[0m\n");
+			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 		}
 		strcpy(current_dir, dest_dir);
 #ifdef DEBUG
