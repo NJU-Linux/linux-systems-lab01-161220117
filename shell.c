@@ -275,7 +275,6 @@ void history_command()
 				i = 1;
 			}
 			while(histr[i] != NULL && i<= history_length){
-				
 				printf("%d: %s\n", i, histr[i]->line);
 				i++;
 			}
@@ -289,7 +288,13 @@ void history_command()
 			}
 			else if((int)p_cmd->para1[1][0] > 47 && (int)p_cmd->para1[1][0] < 48){
 				int cnt = atoi(p_cmd->para1[1]);
-				int i = history_length - cnt;
+				int i = 0;
+				if(history_length > cnt){
+					i = history_length - cnt;
+				}
+				else{
+					i = 1;	//从0还是从1
+				}
 				while(histr[i] != NULL && i <= history_length){
 					printf("%d: %s\n", i, histr[i]->line);
 					i++;
