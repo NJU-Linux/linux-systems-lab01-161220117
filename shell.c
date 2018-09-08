@@ -265,7 +265,6 @@ void history_command()
 {
 	HIST_ENTRY** histr;
 	histr = history_list();
-	printf("para1:%d", p_cmd->para1[1][0]);
 	if(!strcmp(p_cmd->command1, "history")){
 		if(!p_cmd->para1[1]){
 			int i = 0;
@@ -287,7 +286,7 @@ void history_command()
 					perror("write_history error\n");
 				}
 			}
-			else if((int)p_cmd->para1[1][0] > 47 && (int)p_cmd->para1[1][0] < 48){
+			else if(p_cmd->para1[1][0] > 47 && p_cmd->para1[1][0] < 58){
 				int cnt = atoi(p_cmd->para1[1]);
 				printf("cnt:%d\n", cnt);
 				int i = 0;
