@@ -336,8 +336,9 @@ void history_command()
 			int offset = where_history();
 			printf("offset:%d\n", offset);
 			history_set_pos(offset);
-			history_search_prefix (search_entity, -1);
-			printf("offset:%d\n", offset);
+			history_search_prefix(search_entity, -1);
+			entry = current_history();
+			printf("current history:%s\n", entry->line);
 		}
 	}
 	return;
