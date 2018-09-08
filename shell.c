@@ -276,10 +276,10 @@ void history_command()
 			if(history_length > 100){
 				i = history_length - 100;
 			}
-			else{
+			/*else{
 				i = 1;
-			}
-			while(histr[i] != NULL && i<= history_length){
+			}*/
+			while(histr[i] != NULL && i< history_length){
 				printf("%d: %s\n", i, histr[i]->line);
 				i++;
 			}
