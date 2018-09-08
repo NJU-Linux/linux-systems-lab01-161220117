@@ -211,7 +211,7 @@ void cd_command()
 	char* dest_dir;
 	if(p_cmd->para1[0]){
 		char* home_dir;
-		if(!strncmp(p_cmd->para1[0], "~", 1)){
+		/*if(!strncmp(p_cmd->para1[0], "~", 1)){
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
 		}
@@ -219,11 +219,11 @@ void cd_command()
 			dest_dir = malloc(strlen(p_cmd->para1[0]) + strlen(home_dir));
 			strcpy(dest_dir, home_dir);
 			strcat(dest_dir, p_cmd->para1[0]+1);
-		}
-		else{
+		}*/
+		//else{
 			dest_dir = malloc(strlen(p_cmd->para1[0]));
 			strcpy(dest_dir, p_cmd->para1[0]);
-		}
+		//}
 		int ret = chdir(dest_dir);
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
