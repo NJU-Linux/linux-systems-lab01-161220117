@@ -89,6 +89,8 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	parsed_cmd_init();
 	free(command);
 	command = readline(prompt);
+	add_history(command);
+	write_history(NULL);
 	char *temp = malloc(16); temp = strtok(command, " ");
 	while(temp != NULL){
 		p_cmd->line[p_cmd->para_count] = malloc(sizeof(temp));
@@ -326,25 +328,17 @@ void do_command()
 	int in_fd = -1; int out_fd = -1;
 	int status;
 	if(!strcmp(p_cmd->command1, "exit")){
-		add_history(command);
-		write_history(NULL);
 		exit(0);
 	}
 	else if(!strcmp(p_cmd->command1, "help")){
-		add_history(command);
-		write_history(NULL);
 		printf("\033[42;37mVersion:0.0.1\033[0m");
 		printf("\033[42;37mthis is my simple shell\033[0m\n");
 		printf("\033[42;37mnow support simple cmd, redirection in one process, pipe between two processes\033[0m\n");
 	}
 	else if(!strcmp(p_cmd->command1, "cd")){
-		add_history(command);
-		write_history(NULL);	
 		cd_command();	
 	}
 	else if(!strcmp(p_cmd->command1, "history") || !strncmp(p_cmd->command1, "!", 1)){
-		add_history(command);
-		write_history(NULL);
 		history_command();
 	}
 	else{	
@@ -375,9 +369,6 @@ void do_command()
 				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
 				dup2(in_fd, STDIN_FILENO);
 			}
-			add_history(command);
-			printf("command:%s\n", command);
-			write_history(NULL);
 			execvp(p_cmd->command1, p_cmd->para1);
 		}
 		/*父进程*/
