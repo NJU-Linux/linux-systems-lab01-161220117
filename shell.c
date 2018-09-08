@@ -327,14 +327,11 @@ void history_command()
 			char* search_entity = malloc(strlen(p_cmd->command1));
 			strcpy(search_entity, p_cmd->command1+1);
 			HIST_ENTRY* entry = histr[1];
-			printf("entry:%s\n", entry->line);
 			int i = 2;
 			while(histr[i]!=NULL){
 				entry = histr[i++];
-				printf("entry:%s\n", entry->line);
 			}
 			int offset = where_history();
-			printf("offset:%d\n", offset);
 			history_set_pos(offset);
 			history_search_prefix(search_entity, -1);
 			entry = current_history();
