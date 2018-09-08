@@ -315,8 +315,10 @@ void history_command()
 				entry = histr[i++];
 			}
 			char* his_cmd = entry->line;
+			parsed_cmd_init();
 			free(command);
 			command = malloc(strlen(his_cmd));
+			strcpy(command, his_cmd);
 			parse_command();
 			//printf("his_cmd:%s\n", his_cmd);
 			//TODO 把命令化为剩下的继续执行
