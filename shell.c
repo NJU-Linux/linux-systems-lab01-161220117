@@ -267,6 +267,7 @@ void history_command()
 			int i = history_length-100;
 			while(histr[i] != NULL && i<= history_length){
 				printf("%d: %s\n", i, histr[i]->line);
+				i++;
 			}
 		}
 		else{
@@ -281,6 +282,7 @@ void history_command()
 				int i = history_length - cnt;
 				while(histr[i] != NULL && i <= history_length){
 					printf("%d: %s\n", i, histr[i]->line);
+					i++;
 				}
 			}
 		}	
@@ -334,9 +336,8 @@ void do_command()
 	}
 	else if(!strcmp(p_cmd->command1, "history") || !strncmp(p_cmd->command1, "!", 1)){
 		add_history(command);
-		
 		write_history(NULL);
-		history_command();printf("hahha\n");
+		history_command();
 	}
 	else{	
 		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
