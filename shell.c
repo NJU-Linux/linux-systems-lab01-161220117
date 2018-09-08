@@ -300,7 +300,7 @@ void do_command()
 				if(pid2 == 0){
 					close(pipefd[1]);
 					dup2(pipefd[0], STDIN_FILENO);
-					//printf("before execvp: para1: %s %s", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt-1]);
+					printf("before execvp: para1: %s %s", p_cmd->para1[p_cmd->para1_cnt-1], p_cmd->para1[p_cmd->para1_cnt-1]);
 					//execvp(p_cmd->command2, p_cmd->para2);
 				}
 				else{
