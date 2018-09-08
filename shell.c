@@ -266,6 +266,7 @@ void history_command()
 		if(!p_cmd->para1[1]){
 			int i = history_length-100;
 			while(histr[i] != NULL && i<= history_length){
+				printf("hahaha\n");
 				printf("%d: %s\n", i, histr[i]->line);
 				i++;
 			}
