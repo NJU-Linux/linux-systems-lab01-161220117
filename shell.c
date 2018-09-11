@@ -320,8 +320,6 @@ void history_command()
 			command = malloc(strlen(his_cmd));
 			strcpy(command, his_cmd);
 			parse_command();
-			//printf("his_cmd:%s\n", his_cmd);
-			//TODO 把命令化为剩下的继续执行
 		}
 		else{
 			char* search_entity = malloc(strlen(p_cmd->command1));
@@ -411,9 +409,9 @@ void do_command()
 					waitpid(pid2, &status, 0);
 				}
 			}
-			/*else if(p_cmd->flag & IF_BG){
-				
-			}*/
+			else if(p_cmd->flag & IF_BG){
+				printf("[child pid]:%d\n", pid);	
+			}
 			else{
 				waitpid(pid, &status, 0);
 			}
