@@ -383,6 +383,7 @@ void pipe_command()
 				printf("i_cmd:%d in 382\n", i_cmd);
 				close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
+				printf("i_cmd:%d in 386\n", i_cmd);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
