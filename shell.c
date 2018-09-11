@@ -485,24 +485,13 @@ void do_command()
 		if(!strcmp(p_cmd->command1, "!!")){
 			history_command();
 		}
-/*		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
-			if(pipe(pipefd)){
-				printf("\033[41;37mERROR when pipe!\033[0m\n");
-				exit(1);
-			}
-		}*/
-		else if(p_cmd->flag & IF_PIPE){
+		if(p_cmd->flag & IF_PIPE){
 			pipe_command();
 		}
 		else{
 			pid_t pid = fork();
 			/*子进程*/
 			if(pid == 0){
-				/*if(p_cmd->flag & IF_PIPE){
-					//子进程command1关读口0把写口与输出关联
-					close(pipefd[0]);
-					dup2(pipefd[1], fileno(stdout));
-				}*/
 				if(p_cmd->flag & OUT_DI){
 						out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT, 0666);
 					dup2(out_fd, STDOUT_FILENO);
@@ -520,20 +509,6 @@ void do_command()
 			}
 			/*父进程*/
 			else{
-				/*if(p_cmd->flag & IF_PIPE){
-					//子进程2command2关写口1把读口与输出关联
-					pid_t pid2 = fork();
-					if(pid2 == 0){
-						close(pipefd[1]);
-						dup2(pipefd[0], fileno(stdin));
-						execvp(p_cmd->command2, p_cmd->para2);
-					}
-					else{
-						close(pipefd[0]);
-						close(pipefd[1]);	//记得关管道！！！！不然进程就被挂起了！！！！
-						waitpid(pid2, &status, 0);
-					}
-				}*/
 				if(p_cmd->flag & IF_BG){
 					printf("[child pid]:%d\n", pid);	
 				}
@@ -546,7 +521,6 @@ void do_command()
 					}
 					waitpid(pid, &status, 0);
 				}
-				//exit(0);	
 			}
 		}
 	}
