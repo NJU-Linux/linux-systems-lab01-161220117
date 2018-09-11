@@ -365,7 +365,6 @@ void pipe_command()
 	pid_t pid;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
 		int if_odd = 0;
-		printf("hahah\n");
 		if(i_cmd%2 == 0){
 			pipe(pipefd_even);
 		}
@@ -376,37 +375,45 @@ void pipe_command()
 		char* pcmd[64] = {};
 		pid = fork();
 		/*子进程*/
-		if(pid == 0){
-			printf("i_cmd:%d in 377\n", i_cmd);
+		if(pid == -1){
+			if (i_cmd != cmd_cnt - 1){
+				if (i_cmd % 2 != 0){
+					close(pipefd_odd[1]); // for odd i
+				}else{
+					close(pipefd_even[1]); // for even i
+				} 
+			}			
+			printf("Child process could not be created\n");
+			return;
+		}
+		else if(pid == 0){
 			int pcmd_cnt = 0;
-			printf("i_cmd:%d in 379\n", i_cmd);
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
-				printf("i_cmd:%d in 382\n", i_cmd);
 				close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
-					//close(pipefd_odd[1]);
+					close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
 				}
 				else{
-					//close(pipefd_even[1]);
+					close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
 				}
 			}
 			else{	//中间指令，如果为奇，把偶的读与输入关联，奇的写与输出关联
 				if(if_odd){
-					//close(pipefd_even[1]);
+					close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
-					//close(pipefd_odd[0]);
+					close(pipefd_odd[0]);
 					dup2(pipefd_odd[1], STDOUT_FILENO);
 				}
 				else{
-					//close(pipefd_odd[1]);
+					close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
-					//close(pipefd_even[0]);
+					close(pipefd_even[0]);
 					dup2(pipefd_even[1], STDOUT_FILENO);
 				}
 			}
