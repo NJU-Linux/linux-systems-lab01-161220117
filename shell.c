@@ -419,7 +419,7 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			execvp(p_cmd->line[cmd_pos[i_cmd]], &p_cmd->line[cmd_pos[i_cmd]]);
+			execvp(p_cmd->line[cmd_pos[i_cmd]], p_cmd->line+cmd_pos[i_cmd]);
 		}
 		/*父进程*/
 		else{
