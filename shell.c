@@ -430,10 +430,14 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
+			for(int i = 0; i<=pcmd_cnt; i++){
+				printf("pcmd:%s ", pcmd[i]);
+			}
+			printf("\n");
 			execvp(pcmd[0], pcmd);
 		}
 		/*父进程*/
-		//else{
+		else{
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}
@@ -461,8 +465,8 @@ void pipe_command()
 			if(out_fd != -1){
 				close(out_fd);
 			}
-			//waitpid(pid, &status, 0);
-		//}
+			waitpid(pid, &status, 0);
+		}
 		waitpid(pid, &status, 0);
 	}
 }
@@ -498,7 +502,7 @@ void do_command()
 				exit(1);
 			}
 		}*/
-		if(p_cmd->flag & IF_PIPE){
+		else if(p_cmd->flag & IF_PIPE){
 			pipe_command();
 		}
 		else{
