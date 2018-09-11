@@ -196,6 +196,14 @@ void parse_command()
 			}
 		}
 	}
+	cmd_pos[cmd_cnt++] = 0;	//第一个指令从0开始
+	for(int i = 0; i<p_cmd->para_count; i++){
+		if(!strcmp(p_cmd->line[i], "|")){
+			pipe_cnt++;
+			p_cmd->line[i] = NULL;
+			cmd_pos[cmd_cnt++] = i+1;
+		}
+	}
 #ifdef DEBUG
 	printf("this is cmd1\n");
 	printf("%s ", p_cmd->command1);
@@ -228,14 +236,6 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	add_history(command);
 	write_history(NULL);
 	parse_command();
-	cmd_pos[cmd_cnt++] = 0;	//第一个指令从0开始
-	for(int i = 0; i<p_cmd->para_count; i++){
-		if(!strcmp(p_cmd->line[i], "|")){
-			pipe_cnt++;
-			p_cmd->line[i] = NULL;
-			cmd_pos[cmd_cnt++] = i+1;
-		}
-	}
 #ifdef DEBUG
 	for(int i = 0; i<p_cmd->para_count; i++){
 		printf("line %d:%s ", i, p_cmd->line[i]);
@@ -382,7 +382,7 @@ void pipe_command()
 				dup2(pipefd_even[1], STDOUT_FILENO);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
-				if(cmd_cnt % 2 != 0){
+				if(cmd_cnt % 2 != 0){	//这里注意数的是一共有多少指令！！
 					dup2(pipefd_odd[0], STDIN_FILENO);
 				}
 				else{
@@ -418,12 +418,11 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			/**/
-			for(int i = 0; i<=pcmd_cnt; i++){
+			/*下面这段printf不能加！！！！一加了也相当于被算到stdout了！会使比如第二个指令是wc -l的指令多算！！！*/
+			/*for(int i = 0; i<=pcmd_cnt; i++){
 				printf("pcmd:%s ", pcmd[i]);
 			}
-			printf("\n");
-			/**/
+			printf("\n");*/
 			execvp(pcmd[0], pcmd);
 		}
 		//父进程
