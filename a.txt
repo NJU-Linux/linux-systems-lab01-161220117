@@ -1,11 +1,4 @@
-.
-..
-a.txt
-cat
-.git
-Makefile
-mysh
-myshell.h
-README.md
-shell.c
-wc
+1 a.txt
+404040
+404040
+40404

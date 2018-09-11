@@ -55,10 +55,10 @@ int cmd_pos[64];
 int do_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
-		sprintf(prompt, "\033[43;37m[myshell]\033[0m%s@%s:", pass_wd->pw_name, hostname);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m%s@%s\033[0m:", pass_wd->pw_name, hostname);
 	} 
 	else{
-		sprintf(prompt, "\033[43;37m[myshell]\033[0m%s@???:", pass_wd->pw_name);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m%s@???\033[0m:", pass_wd->pw_name);
 	}
 	if( !strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
 		char temp_dir[maxn_dirname];
@@ -66,7 +66,7 @@ int do_prompt()
 		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
 		strcpy(current_dir, temp_dir);
 	}
-	sprintf(prompt+strlen(prompt), "%s$ ", current_dir);
+	sprintf(prompt+strlen(prompt), "\033[36m%s\033[0m$ ", current_dir);
 	//printf("%s", prompt);
 	return 0;
 }
@@ -139,32 +139,6 @@ void parse_command()
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 					which_cmd = 2;
 				}
-				/*else if(p_cmd->line[i][len-1] == '|'){
-					p_cmd->line[i][len-1] = 0;
-					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));					
-					strcpy(p_cmd->command2, p_cmd->line[++i]);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
-					which_cmd = 2;
-				}
-				else if(p_cmd->line[i][0] == '|'){
-					p_cmd->command2 = malloc(strlen(p_cmd->line[i]));
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i]));
-					strcpy(p_cmd->command2, p_cmd->line[i]+1);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]+1);
-					which_cmd = 2;
-				}
-				else{
-					char* tmp = strtok(p_cmd->line[i], "|");
-					p_cmd->para1[p_cmd->para1_cnt] = malloc(strlen(tmp));
-					strcpy(p_cmd->para1[p_cmd->para1_cnt++], tmp);
-					tmp = strtok(NULL, "|");
-					p_cmd->command2 = malloc(strlen(tmp));
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(tmp));
-					strcpy(p_cmd->command2, tmp);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], tmp);
-					which_cmd = 2;
-				}*/
 			}
 			else if(!strcmp(p_cmd->line[i], "<<") || !strcmp(p_cmd->line[i], "<")){
 				p_cmd->flag |= IN_DI;
@@ -428,6 +402,12 @@ void pipe_command()
 		}
 		//父进程
 		else{
+			if(in_fd != -1){
+				close(in_fd);
+			}
+			if(out_fd != -1){
+				close(out_fd);
+			}
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}
@@ -448,12 +428,6 @@ void pipe_command()
 					close(pipefd_odd[0]);
 					close(pipefd_even[1]);
 				}
-			}
-			if(in_fd != -1){
-				close(in_fd);
-			}
-			if(out_fd != -1){
-				close(out_fd);
 			}			
 			waitpid(pid, &status, 0);
 			i_cmd++;

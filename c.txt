@@ -1,0 +1,3 @@
+ 4 a.txt
+ 1 c.txt
+ 5 total
