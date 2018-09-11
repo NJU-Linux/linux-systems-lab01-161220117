@@ -418,10 +418,12 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			/*for(int i = 0; i<=pcmd_cnt; i++){
+			/**/
+			for(int i = 0; i<=pcmd_cnt; i++){
 				printf("pcmd:%s ", pcmd[i]);
 			}
-			printf("\n");*/
+			printf("\n");
+			/**/
 			execvp(pcmd[0], pcmd);
 		}
 		//父进程
