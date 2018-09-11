@@ -373,57 +373,33 @@ void pipe_command()
 			pipe(pipefd_odd);
 		}
 		char* pcmd[64] = {}; int pcmd_cnt = 0;
+		//int i_current_pos = cmd_pos[i_cmd];
 		pid = fork();
 		/*子进程*/
-		if(pid == -1){
-			if (i_cmd != cmd_cnt - 1){
-				if (i_cmd % 2 != 0){
-					close(pipefd_odd[1]); // for odd i
-				}else{
-					close(pipefd_even[1]); // for even i
-				} 
-			}			
-			printf("Child process could not be created\n");
-			return;
-		}
-		else if(pid == 0){
-			/*处理管道*/
+		if(pid == 0){
+			//处理管道
 			if(i_cmd == 0){	//第一个指令把1与输出关联
-				//close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
-				//close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
-				if(i_cmd % 2 != 0){
-					//close(pipefd_odd[1]);
+				if(cmd_cnt % 2 != 0){
 					dup2(pipefd_odd[0], STDIN_FILENO);
-					//close(pipefd_odd[0]);
 				}
 				else{
-					//close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
-					//close(pipefd_even[0]);
 				}
 			}
 			else{	//中间指令，如果为奇，把偶的读与输入关联，奇的写与输出关联
-				if(if_odd){
-					//close(pipefd_even[1]);
-					dup2(pipefd_even[0], STDIN_FILENO);
-					//close(pipefd_even[0]);
-					//close(pipefd_odd[0]);
-					dup2(pipefd_odd[1], STDOUT_FILENO);
-					//close(pipefd_odd[1]);
+				if (if_odd){
+					dup2(pipefd_even[0],STDIN_FILENO); 
+					dup2(pipefd_odd[1],STDOUT_FILENO);
 				}
 				else{
-					//close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
-					//close(pipefd_odd[0]);
-					//close(pipefd_even[0]);
 					dup2(pipefd_even[1], STDOUT_FILENO);
-					//close(pipefd_even[1]);
 				}
 			}
-			/*处理重定向*/
+			//处理重定向
 			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
@@ -442,32 +418,27 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			for(int i = 0; i<=pcmd_cnt; i++){
+			/*for(int i = 0; i<=pcmd_cnt; i++){
 				printf("pcmd:%s ", pcmd[i]);
 			}
-			printf("\n");
-			//close(pipefd_odd[0]); close(pipefd_odd[1]);
-			//close(pipefd_even[0]); close(pipefd_even[1]);
+			printf("\n");*/
 			execvp(pcmd[0], pcmd);
 		}
-		/*父进程*/
-		//else{
+		//父进程
+		else{
 			if(i_cmd == 0){
-				close(pipefd_even[0]);
-				//close(pipefd_even[1]);
+				close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){
-				if(i_cmd % 2 != 0){
+				if(cmd_cnt % 2 != 0){
 					close(pipefd_odd[0]);
-					//close(pipefd_odd[1]);
 				}
 				else{
-					close(pipefd_even[1]);
 					close(pipefd_even[0]);
 				}
-			}
+			}		
 			else{
-				if(if_odd){
+				if(i_cmd % 2 != 0){
 					close(pipefd_even[0]);
 					close(pipefd_odd[1]);
 				}
@@ -481,11 +452,10 @@ void pipe_command()
 			}
 			if(out_fd != -1){
 				close(out_fd);
-			}
+			}			
 			waitpid(pid, &status, 0);
-		//}
-		//waitpid(pid, NULL, 0);
-		i_cmd++;
+			i_cmd++;
+		}	
 	}
 }
 void do_command()
