@@ -359,8 +359,8 @@ void history_command()
 void pipe_command()
 {
 	int status;
-	int pipefd_odd[2] = {0, 0};
-	int pipefd_even[2] = {0, 0};
+	int pipefd_odd[2];
+	int pipefd_even[2];
 	int in_fd = -1, out_fd = -1;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
 		int if_odd = 0;
@@ -384,7 +384,6 @@ void pipe_command()
 				//close(pipefd_even[0]);
 				printf("i_cmd:%d in 385\n", i_cmd);
 				dup2(pipefd_even[1], STDOUT_FILENO);
-				printf("i_cmd:%d in 385\n", i_cmd);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
