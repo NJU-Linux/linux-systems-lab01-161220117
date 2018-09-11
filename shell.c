@@ -407,7 +407,7 @@ void do_command()
 				}
 				else{
 					close(pipefd[0]);
-					close(pipe2fd[1]);
+					close(pipefd[1]);
 					waitpid(pid2, &status, 0);
 				}
 			}
