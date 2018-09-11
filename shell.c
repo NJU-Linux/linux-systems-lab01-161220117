@@ -139,7 +139,7 @@ void parse_command()
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 					which_cmd = 2;
 				}
-				else if(p_cmd->line[i][len-1] == '|'){
+				/*else if(p_cmd->line[i][len-1] == '|'){
 					p_cmd->line[i][len-1] = 0;
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
 					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));					
@@ -164,7 +164,7 @@ void parse_command()
 					strcpy(p_cmd->command2, tmp);
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], tmp);
 					which_cmd = 2;
-				}
+				}*/
 			}
 			else if(!strcmp(p_cmd->line[i], "<<") || !strcmp(p_cmd->line[i], "<")){
 				p_cmd->flag |= IN_DI;
@@ -229,7 +229,9 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	write_history(NULL);
 	parse_command();
 	for(int i = 0; i<p_cmd->para_count; i++){
-		printf("line:%s\n", p_cmd->line[i]);
+		if(!strcmp(p_cmd->line[i], "|")){
+			pipe_cnt++;
+		}
 	}
 	return 0;
 }
@@ -433,16 +435,16 @@ int main(int argc, char* argv[])
 		printf("argv[%d] = %s\n", i, argv[i]);
  		} 
 	//getcwd(current_dir, sizeof(current_dir));//初始化认为在~中,当用到cd的时候再更换看当前目录
-	pipe_cnt = 0; cmd_cnt = 0;
-	for(int i = 0; i<64; i++){
-		cmd_pos[i] = 0;
-	}
 	p_cmd = malloc(sizeof(struct parsed_cmd));
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
 	read_history(NULL);
-	while(1){
+	while(1){	
+		pipe_cnt = 0; cmd_cnt = 0;
+		for(int i = 0; i<64; i++){
+			cmd_pos[i] = 0;
+		}
 		do_prompt();
 		read_command();
 		do_command();	
