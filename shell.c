@@ -366,7 +366,8 @@ void pipe_command()
 		int if_odd = 0;
 		printf("hahah\n");
 		if(i_cmd%2 == 0){
-			pipe(pipefd_even);
+			int ret = pipe(pipefd_even);
+			printf("ret:%d\n", ret);
 		}
 		else{
 			if_odd = 1;
@@ -383,8 +384,7 @@ void pipe_command()
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				printf("i_cmd:%d in 382\n", i_cmd);
 				close(pipefd_even[0]);
-				int ret = dup2(pipefd_even[1], STDOUT_FILENO);
-				printf("ret:%d\n", ret);
+				dup2(pipefd_even[1], STDOUT_FILENO);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
