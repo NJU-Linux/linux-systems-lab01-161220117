@@ -358,6 +358,7 @@ void history_command()
 }
 void pipe_command()
 {
+	int status;
 	int pipefd_odd[2] = {0, 0};
 	int pipefd_even[2] = {0, 0};
 	int in_fd = -1, out_fd = -1;
@@ -458,9 +459,9 @@ void pipe_command()
 			if(out_fd != -1){
 				close(out_fd);
 			}
-			waitpid(pid, NULL, 0);
+			waitpid(pid, &status, 0);
 		}
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, 0);
 	}
 }
 void do_command()
