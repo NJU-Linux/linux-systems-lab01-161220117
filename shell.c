@@ -450,10 +450,10 @@ void pipe_command()
 			else if(i_cmd == cmd_cnt - 1){
 				if(if_odd){
 					close(pipefd_odd[0]);
-					close(pipefd_odd[1]);
+					//close(pipefd_odd[1]);
 				}
 				else{
-					close(pipefd_even[1]);
+					//close(pipefd_even[1]);
 					close(pipefd_even[0]);
 				}
 			}
@@ -473,7 +473,7 @@ void pipe_command()
 			if(out_fd != -1){
 				close(out_fd);
 			}
-			//waitpid(pid, &status, 0);
+			waitpid(pid, &status, 0);
 		}
 		waitpid(pid, NULL, 0);
 		i_cmd++;
