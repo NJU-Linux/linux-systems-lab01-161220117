@@ -403,18 +403,18 @@ void pipe_command()
 				}
 			}
 			/*处理重定向*/
-			int i_current_pos = cmd_pos[i];
+			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
 				if(!strcmp(p_cmd->line[i_current_pos], "<") || !strcmp(p_cmd->line[i_current_pos], "<<")){
-					in_fd = open(file_name, O_RDONLY, 0666);
+					in_fd = open(p_cmd->line[++i_current_pos], O_RDONLY, 0666);
 					dup2(in_fd, STDIN_FILENO);		
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">")){
-					out_fd = open(file_name, O_WRONLY|O_CREAT, 0666);
+					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">>")){
-					out_fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0666);
+					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT|O_TRUNC, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
 				i_current_pos++;
@@ -456,7 +456,7 @@ void pipe_command()
 }
 void do_command()
 {
-	int pipefd[2] = {0, 0};
+	//int pipefd[2] = {0, 0};
 	int in_fd = -1; int out_fd = -1;
 	int status;
 	if(!strcmp(p_cmd->command1, "exit")){
@@ -529,7 +529,7 @@ void do_command()
 						waitpid(pid2, &status, 0);
 					}
 				}*/
-				else if(p_cmd->flag & IF_BG){
+				if(p_cmd->flag & IF_BG){
 					printf("[child pid]:%d\n", pid);	
 				}
 				else{
