@@ -55,10 +55,10 @@ int cmd_pos[64];
 int do_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
-		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m%s@%s\033[0m:", pass_wd->pw_name, hostname);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m;1m%s@%s\033[0m:", pass_wd->pw_name, hostname);
 	} 
 	else{
-		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m%s@???\033[0m:", pass_wd->pw_name);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m\033[32m;1m%s@???\033[0m:", pass_wd->pw_name);
 	}
 	if( !strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
 		char temp_dir[maxn_dirname];
@@ -66,7 +66,7 @@ int do_prompt()
 		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
 		strcpy(current_dir, temp_dir);
 	}
-	sprintf(prompt+strlen(prompt), "\033[36m%s\033[0m$ ", current_dir);
+	sprintf(prompt+strlen(prompt), "\033[36m;1m%s\033[0m$ ", current_dir);
 	//printf("%s", prompt);
 	return 0;
 }
