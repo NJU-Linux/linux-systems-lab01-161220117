@@ -454,12 +454,12 @@ void pipe_command()
 		else{
 			if(i_cmd == 0){
 				close(pipefd_even[0]);
-				close(pipefd_even[1]);
+				//close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){
 				if(if_odd){
-					//close(pipefd_odd[0]);
-					close(pipefd_odd[1]);
+					close(pipefd_odd[0]);
+					//close(pipefd_odd[1]);
 				}
 				else{
 					close(pipefd_even[1]);
