@@ -1,5 +1,5 @@
 cc = gcc
-OBJ = njush
+OBJ = mysh
 all :
 		@$(cc) -c -Wall ./*.c
 		@echo complete *.c
