@@ -363,7 +363,7 @@ void pipe_command()
 	int pipefd_even[2];
 	int in_fd = -1, out_fd = -1;
 	pid_t pid;
-	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
+	for(int i_cmd = 0; i_cmd<cmd_cnt; ){
 		int if_odd = 0;
 		if(i_cmd%2 == 0){
 			pipe(pipefd_even);
@@ -417,7 +417,6 @@ void pipe_command()
 				}
 			}
 			/*处理重定向*/
-			printf("i_cmd:%d\n", i_cmd);
 			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
@@ -477,6 +476,7 @@ void pipe_command()
 			//waitpid(pid, &status, 0);
 		//}
 		waitpid(pid, &status, 0);
+		i_cmd++;
 	}
 }
 void do_command()
