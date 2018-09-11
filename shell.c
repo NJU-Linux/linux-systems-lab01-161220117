@@ -51,10 +51,10 @@ int history_base;
 int do_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
-		sprintf(prompt, "[myshell]%s@%s:", pass_wd->pw_name, hostname);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m%s@%s:", pass_wd->pw_name, hostname);
 	} 
 	else{
-		sprintf(prompt, "[myshell]%s@???:", pass_wd->pw_name);
+		sprintf(prompt, "\033[43;37m[myshell]\033[0m%s@???:", pass_wd->pw_name);
 	}
 	if( !strncmp(current_dir, pass_wd->pw_dir, strlen(pass_wd->pw_dir))){
 		char temp_dir[maxn_dirname];
@@ -407,7 +407,7 @@ void do_command()
 				}
 				else{
 					close(pipefd[0]);
-					close(pipefd[1]);
+					close(pipefd[1]);	//记得关管道！！！！不然进程就被挂起了！！！！
 					waitpid(pid2, &status, 0);
 				}
 			}
