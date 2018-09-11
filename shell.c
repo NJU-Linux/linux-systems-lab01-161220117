@@ -370,9 +370,11 @@ void pipe_command()
 			if_odd = 1;
 			pipe(pipefd_odd);
 		}
+		char* pcmd[64] = {};
 		pid_t pid = fork();
 		/*子进程*/
 		if(pid == 0){
+			int pcmd_cnt = 0;
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				close(pipefd_even[0]);
@@ -405,6 +407,8 @@ void pipe_command()
 			/*处理重定向*/
 			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
+				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
+				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
 				if(!strcmp(p_cmd->line[i_current_pos], "<") || !strcmp(p_cmd->line[i_current_pos], "<<")){
 					in_fd = open(p_cmd->line[++i_current_pos], O_RDONLY, 0666);
 					dup2(in_fd, STDIN_FILENO);		
@@ -419,7 +423,7 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			execvp(p_cmd->line[cmd_pos[i_cmd]], p_cmd->line+cmd_pos[i_cmd]);
+			execvp(pcmd[0], pcmd);
 		}
 		/*父进程*/
 		else{
