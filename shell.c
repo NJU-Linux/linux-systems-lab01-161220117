@@ -362,6 +362,7 @@ void pipe_command()
 	int pipefd_even[2] = {0, 0};
 	int in_fd = -1, out_fd = -1;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
+		printf("i_cmd in 365:%d\n", i_cmd);
 		int if_odd = 0;
 		if(i_cmd%2 == 0){
 			pipe(pipefd_even);
@@ -374,6 +375,7 @@ void pipe_command()
 		pid_t pid = fork();
 		/*子进程*/
 		if(pid == 0){
+			printf("i_cmd:%d in 378\n", i_cmd);
 			int pcmd_cnt = 0;
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
