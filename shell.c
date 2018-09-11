@@ -372,7 +372,7 @@ void pipe_command()
 			if_odd = 1;
 			pipe(pipefd_odd);
 		}
-		char* pcmd[64] = {};
+		char* pcmd[64] = {};int pcmd_cnt = 0;
 		pid = fork();
 		/*子进程*/
 		if(pid == -1){
@@ -387,7 +387,6 @@ void pipe_command()
 			return;
 		}
 		else if(pid == 0){
-			int pcmd_cnt = 0;
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				close(pipefd_even[0]);
@@ -446,13 +445,16 @@ void pipe_command()
 		/*父进程*/
 		else{
 			if(i_cmd == 0){
+				close(pipefd_even[0]);
 				close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){
 				if(if_odd){
 					close(pipefd_odd[0]);
+					close(pipefd_odd[1]);
 				}
 				else{
+					close(pipefd_even[1]);
 					close(pipefd_even[0]);
 				}
 			}
