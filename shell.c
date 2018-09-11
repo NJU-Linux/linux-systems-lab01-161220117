@@ -384,6 +384,7 @@ void pipe_command()
 				//close(pipefd_even[0]);
 				printf("i_cmd:%d in 385\n", i_cmd);
 				dup2(pipefd_even[1], STDOUT_FILENO);
+				printf("i_cmd:%d in 385\n", i_cmd);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
