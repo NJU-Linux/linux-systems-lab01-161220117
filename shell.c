@@ -381,30 +381,30 @@ void pipe_command()
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				printf("i_cmd:%d in 382\n", i_cmd);
-				close(pipefd_even[0]);
+				//close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
-					close(pipefd_odd[1]);
+					//close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
 				}
 				else{
-					close(pipefd_even[1]);
+					//close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
 				}
 			}
 			else{	//中间指令，如果为奇，把偶的读与输入关联，奇的写与输出关联
 				if(if_odd){
-					close(pipefd_even[1]);
+					//close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
-					close(pipefd_odd[0]);
+					//close(pipefd_odd[0]);
 					dup2(pipefd_odd[1], STDOUT_FILENO);
 				}
 				else{
-					close(pipefd_odd[1]);
+					//close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
-					close(pipefd_even[0]);
+					//close(pipefd_even[0]);
 					dup2(pipefd_even[1], STDOUT_FILENO);
 				}
 			}
@@ -432,7 +432,6 @@ void pipe_command()
 		}
 		/*父进程*/
 		else{
-			waitpid(pid, &status, 0);
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}
