@@ -406,6 +406,8 @@ void do_command()
 					execvp(p_cmd->command2, p_cmd->para2);
 				}
 				else{
+					close(pipefd[0]);
+					close(pipe2fd[1]);
 					waitpid(pid2, &status, 0);
 				}
 			}
