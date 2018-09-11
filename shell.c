@@ -32,7 +32,7 @@ struct parsed_cmd
 	char* in_file;
 	char* out_file;
 	int para_count;
-	char* line[64];
+	char* line[64];	//用para_count和line实现multiple pipe的实现
 	char* command1;
 	char* para1[32]; int para1_cnt;
 	char* command2;
@@ -47,6 +47,10 @@ struct parsed_cmd* p_cmd;
 
 int history_length;
 int history_base;
+
+int pipe_cnt;
+int cmd_cnt;
+int cmd_pos[64];
 
 int do_prompt()
 {
@@ -224,6 +228,9 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	add_history(command);
 	write_history(NULL);
 	parse_command();
+	for(int i = 0; i<p_cmd->para_count; i++){
+		printf("line:%s\n", p_cmd->line[i]);
+	}
 	return 0;
 }
 void cd_command()
@@ -426,6 +433,10 @@ int main(int argc, char* argv[])
 		printf("argv[%d] = %s\n", i, argv[i]);
  		} 
 	//getcwd(current_dir, sizeof(current_dir));//初始化认为在~中,当用到cd的时候再更换看当前目录
+	pipe_cnt = 0; cmd_cnt = 0;
+	for(int i = 0; i<64; i++){
+		cmd_pos[i] = 0;
+	}
 	p_cmd = malloc(sizeof(struct parsed_cmd));
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());

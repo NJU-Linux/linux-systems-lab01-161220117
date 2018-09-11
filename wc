@@ -1,0 +1,11 @@
+total 60
+drwxrwxr-x  3 tsm tsm  4096 9月  11 14:10 .
+drwxr-xr-x 22 tsm tsm  4096 9月  11 10:50 ..
+-rw-rw-r--  1 tsm tsm    39 9月   8 10:25 a.txt
+drwxrwxr-x  8 tsm tsm  4096 9月  11 10:50 .git
+-rw-rw-r--  1 tsm tsm   249 9月  11 10:50 Makefile
+-rwxrwxr-x  1 tsm tsm 17560 9月  11 10:50 mysh
+-rw-rw-r--  1 tsm tsm    89 9月   7 20:16 myshell.h
+-rw-rw-r--  1 tsm tsm    98 9月  11 10:50 README.md
+-rw-rw-r--  1 tsm tsm 11671 9月  11 13:59 shell.c
+-rw-rw-r--  1 tsm tsm     0 9月  11 14:10 wc
