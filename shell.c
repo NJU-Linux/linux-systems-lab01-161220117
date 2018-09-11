@@ -405,14 +405,17 @@ void pipe_command()
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
 				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
 				if(!strcmp(p_cmd->line[i_current_pos], "<") || !strcmp(p_cmd->line[i_current_pos], "<<")){
+					p_cmd->line[i_current_pos] = NULL;
 					in_fd = open(p_cmd->line[++i_current_pos], O_RDONLY, 0666);
 					dup2(in_fd, STDIN_FILENO);		
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">")){
+					p_cmd->line[i_current_pos] = NULL;
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">>")){
+					p_cmd->line[i_current_pos] = NULL;
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT|O_TRUNC, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
