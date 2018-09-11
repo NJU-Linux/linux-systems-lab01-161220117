@@ -233,12 +233,15 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 		if(!strcmp(p_cmd->line[i], "|")){
 			pipe_cnt++;
 			p_cmd->line[i] = NULL;
-			cmd_pos[cmd_cnt++] = i;
+			cmd_pos[cmd_cnt++] = i+1;
 		}
 	}
+#ifdef DEBUG
 	for(int i = 0; i<p_cmd->para_count; i++){
-		printf("line:%s\n", p_cmd->line[i]);
+		printf("line %d:%s ", i, p_cmd->line[i]);
 	}
+	printf("\n");
+#endif
 	return 0;
 }
 void cd_command()
@@ -353,6 +356,104 @@ void history_command()
 	}
 	return;
 }
+void pipe_command()
+{
+	int pipefd_odd[2] = {0, 0};
+	int pipefd_even[2] = {0, 0};
+	int in_fd = -1, out_fd = -1;
+	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
+		int if_odd = 0;
+		if(i_cmd%2 == 0){
+			pipe(pipefd_even);
+		}
+		else{
+			if_odd = 1;
+			pipe(pipefd_odd);
+		}
+		pid_t pid = fork();
+		/*子进程*/
+		if(pid == 0){
+			/*处理管道*/
+			if(i_cmd == 0){	//第一个指令把1与输出关联
+				close(pipefd_even[0]);
+				dup2(pipefd_even[1], STDOUT_FILENO);
+			}
+			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
+				if(if_odd){
+					close(pipefd_odd[1]);
+					dup2(pipefd_odd[0], STDIN_FILENO);
+				}
+				else{
+					close(pipefd_even[1]);
+					dup2(pipefd_even[0], STDIN_FILENO);
+				}
+			}
+			else{	//中间指令，如果为奇，把偶的读与输入关联，奇的写与输出关联
+				if(if_odd){
+					close(pipefd_even[1]);
+					dup2(pipefd_even[0], STDIN_FILENO);
+					close(pipefd_odd[0]);
+					dup2(pipefd_odd[1], STDOUT_FILENO);
+				}
+				else{
+					close(pipefd_odd[1]);
+					dup2(pipefd_odd[0], STDIN_FILENO);
+					close(pipefd_even[0]);
+					dup2(pipefd_even[1], STDOUT_FILENO);
+				}
+			}
+			/*处理重定向*/
+			int i_current_pos = cmd_pos[i];
+			while(p_cmd->line[i_current_pos]){
+				if(!strcmp(p_cmd->line[i_current_pos], "<") || !strcmp(p_cmd->line[i_current_pos], "<<")){
+					in_fd = open(file_name, O_RDONLY, 0666);
+					dup2(in_fd, STDIN_FILENO);		
+				}
+				else if(!strcmp(p_cmd->line[i_current_pos], ">")){
+					out_fd = open(file_name, O_WRONLY|O_CREAT, 0666);
+					dup2(out_fd, STDOUT_FILENO);
+				}
+				else if(!strcmp(p_cmd->line[i_current_pos], ">>")){
+					out_fd = open(file_name, O_WRONLY|O_CREAT|O_TRUNC, 0666);
+					dup2(out_fd, STDOUT_FILENO);
+				}
+				i_current_pos++;
+			}
+			execvp(p_cmd->line[cmd_pos[i_cmd]], &p_cmd->line[cmd_pos[i_cmd]]);
+		}
+		/*父进程*/
+		else{
+			if(i_cmd == 0){
+				close(pipefd_even[1]);
+			}
+			else if(i_cmd == cmd_cnt - 1){
+				if(if_odd){
+					close(pipefd_odd[0]);
+				}
+				else{
+					close(pipefd_even[0]);
+				}
+			}
+			else{
+				if(if_odd){
+					close(pipefd_even[0]);
+					close(pipefd_odd[1]);
+				}
+				else{
+					close(pipefd_odd[0]);
+					close(pipefd_even[1]);
+				}
+			}
+			if(in_fd != -1){
+				close(in_fd);
+			}
+			if(out_fd != -1){
+				close(out_fd);
+			}
+			waitpid(pid, NULL, 0);
+		}
+	}
+}
 void do_command()
 {
 	int pipefd[2] = {0, 0};
@@ -379,58 +480,69 @@ void do_command()
 		if(!strcmp(p_cmd->command1, "!!")){
 			history_command();
 		}
-		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
+/*		if(p_cmd->flag & IF_PIPE){	//创建管道连接两个进程
 			if(pipe(pipefd)){
 				printf("\033[41;37mERROR when pipe!\033[0m\n");
 				exit(1);
 			}
+		}*/
+		if(p_cmd->flag & IF_PIPE){
+			pipe_command();
 		}
-		pid_t pid = fork();
-		/*子进程*/
-		if(pid == 0){
-			if(p_cmd->flag & IF_PIPE){
-				//子进程command1关读口0把写口与输出关联
-				close(pipefd[0]);
-				dup2(pipefd[1], fileno(stdout));
-			}
-			else if(p_cmd->flag & OUT_DI){
-					out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT, 0666);
-				dup2(out_fd, STDOUT_FILENO);
-			}
-			else if(p_cmd->flag & OUT_DI_APPEND){
-				out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0666);
-				dup2(out_fd, STDOUT_FILENO);
-			}
-			else if(p_cmd->flag & IN_DI){
-				//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
-				in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
-				dup2(in_fd, STDIN_FILENO);
-			}
-			execvp(p_cmd->command1, p_cmd->para1);
-		}
-		/*父进程*/
 		else{
-			if(p_cmd->flag & IF_PIPE){
-				//子进程2command2关写口1把读口与输出关联
-				pid_t pid2 = fork();
-				if(pid2 == 0){
-					close(pipefd[1]);
-					dup2(pipefd[0], fileno(stdin));
-					execvp(p_cmd->command2, p_cmd->para2);
+			pid_t pid = fork();
+			/*子进程*/
+			if(pid == 0){
+				/*if(p_cmd->flag & IF_PIPE){
+					//子进程command1关读口0把写口与输出关联
+					close(pipefd[0]);
+					dup2(pipefd[1], fileno(stdout));
+				}*/
+				if(p_cmd->flag & OUT_DI){
+						out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT, 0666);
+					dup2(out_fd, STDOUT_FILENO);
+				}
+				else if(p_cmd->flag & OUT_DI_APPEND){
+					out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0666);
+					dup2(out_fd, STDOUT_FILENO);
+				}
+				else if(p_cmd->flag & IN_DI){
+					//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
+					in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
+					dup2(in_fd, STDIN_FILENO);
+				}
+				execvp(p_cmd->command1, p_cmd->para1);
+			}
+			/*父进程*/
+			else{
+				/*if(p_cmd->flag & IF_PIPE){
+					//子进程2command2关写口1把读口与输出关联
+					pid_t pid2 = fork();
+					if(pid2 == 0){
+						close(pipefd[1]);
+						dup2(pipefd[0], fileno(stdin));
+						execvp(p_cmd->command2, p_cmd->para2);
+					}
+					else{
+						close(pipefd[0]);
+						close(pipefd[1]);	//记得关管道！！！！不然进程就被挂起了！！！！
+						waitpid(pid2, &status, 0);
+					}
+				}*/
+				else if(p_cmd->flag & IF_BG){
+					printf("[child pid]:%d\n", pid);	
 				}
 				else{
-					close(pipefd[0]);
-					close(pipefd[1]);	//记得关管道！！！！不然进程就被挂起了！！！！
-					waitpid(pid2, &status, 0);
+					if(out_fd != -1){
+						close(out_fd);
+					}
+					if(in_fd != -1){
+						close(in_fd);
+					}
+					waitpid(pid, &status, 0);
 				}
+				//exit(0);	
 			}
-			else if(p_cmd->flag & IF_BG){
-				printf("[child pid]:%d\n", pid);	
-			}
-			else{
-				waitpid(pid, &status, 0);
-			}
-			//exit(0);	
 		}
 	}
 }
