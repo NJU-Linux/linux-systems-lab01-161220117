@@ -67,7 +67,6 @@ int do_prompt()
 		strcpy(current_dir, temp_dir);
 	}
 	sprintf(prompt+strlen(prompt), "\033[1m\033[34m%s\033[0m\033[0m$ ", current_dir);
-	//printf("%s", prompt);
 	return 0;
 }
 void parsed_cmd_init()
