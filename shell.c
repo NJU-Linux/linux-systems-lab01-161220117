@@ -402,23 +402,21 @@ void pipe_command()
 			//处理重定向
 			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
-				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
-				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
 				if(!strcmp(p_cmd->line[i_current_pos], "<") || !strcmp(p_cmd->line[i_current_pos], "<<")){
-					p_cmd->line[i_current_pos] = NULL;
 					in_fd = open(p_cmd->line[++i_current_pos], O_RDONLY, 0666);
-					dup2(in_fd, STDIN_FILENO);		
+					dup2(in_fd, STDIN_FILENO);	
+					break;	
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">")){
-					p_cmd->line[i_current_pos] = NULL;
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">>")){
-					p_cmd->line[i_current_pos] = NULL;
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT|O_TRUNC, 0666);
 					dup2(out_fd, STDOUT_FILENO);
 				}
+				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
+				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
 				i_current_pos++;
 			}
 			/*下面这段printf不能加！！！！一加了也相当于被算到stdout了！会使比如第二个指令是wc -l的指令多算！！！*/
