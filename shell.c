@@ -359,6 +359,9 @@ void do_command()
 	else if(!strcmp(p_cmd->command1, "history") || (!strncmp(p_cmd->command1, "!", 1) && strcmp(p_cmd->command1, "!!"))){
 		history_command();
 	}
+	else if(!strcmp(p_cmd->command1, "pwd")){
+		printf("%s\n", current_dir);
+	}
 	else{	
 		if(!strcmp(p_cmd->command1, "!!")){
 			history_command();
@@ -400,6 +403,7 @@ void do_command()
 				if(pid2 == 0){
 					close(pipefd[1]);
 					dup2(pipefd[0], STDIN_FILENO);
+					printf("hahha\n");
 					execvp(p_cmd->command2, p_cmd->para2);
 				}
 				else{
