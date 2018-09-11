@@ -405,6 +405,7 @@ void pipe_command()
 				}
 			}
 			/*处理重定向*/
+			printf("i_cmd:%d\n", i_cmd);
 			int i_current_pos = cmd_pos[i_cmd];
 			while(p_cmd->line[i_current_pos]){
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
