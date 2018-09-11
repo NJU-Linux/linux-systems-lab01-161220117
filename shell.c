@@ -449,8 +449,8 @@ void pipe_command()
 			execvp(pcmd[0], pcmd);
 		}
 		/*父进程*/
-		else{
-			if(i_cmd == 0){
+		//else{
+			/*if(i_cmd == 0){
 				//close(pipefd_even[0]);
 				close(pipefd_even[1]);
 			}
@@ -473,15 +473,15 @@ void pipe_command()
 					close(pipefd_odd[0]);
 					close(pipefd_even[1]);
 				}
-			}
+			}*/
 			if(in_fd != -1){
 				close(in_fd);
 			}
 			if(out_fd != -1){
 				close(out_fd);
 			}
-			waitpid(pid, &status, 0);
-		}
+			//waitpid(pid, &status, 0);
+		//}
 		waitpid(pid, NULL, 0);
 		i_cmd++;
 	}
