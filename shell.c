@@ -374,10 +374,12 @@ void pipe_command()
 		pid_t pid = fork();
 		/*子进程*/
 		if(pid == 0){
-			printf("i_cmd:%d in 378\n", i_cmd);
+			printf("i_cmd:%d in 377\n", i_cmd);
 			int pcmd_cnt = 0;
+			printf("i_cmd:%d in 379\n", i_cmd);
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
+				printf("i_cmd:%d in 382\n", i_cmd);
 				close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
 			}
@@ -425,10 +427,6 @@ void pipe_command()
 				}
 				i_current_pos++;
 			}
-			for(int i = 0; i<pcmd_cnt; i++){
-				printf("pcmd:%s ", pcmd[i]);
-			}
-			printf("\n");
 			execvp(pcmd[0], pcmd);
 		}
 		/*父进程*/
