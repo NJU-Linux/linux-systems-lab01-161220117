@@ -364,6 +364,7 @@ void pipe_command()
 	int in_fd = -1, out_fd = -1;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
 		int if_odd = 0;
+		printf("hahah\n");
 		if(i_cmd%2 == 0){
 			pipe(pipefd_even);
 		}
@@ -381,7 +382,7 @@ void pipe_command()
 			/*处理管道*/
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				printf("i_cmd:%d in 382\n", i_cmd);
-				//close(pipefd_even[0]);
+				close(pipefd_even[0]);
 				printf("i_cmd:%d in 385\n", i_cmd);
 				dup2(pipefd_even[1], STDOUT_FILENO);
 				printf("i_cmd:%d in 385\n", i_cmd);
