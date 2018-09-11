@@ -378,7 +378,7 @@ void do_command()
 			if(p_cmd->flag & IF_PIPE){
 				//子进程command1关读口0把写口与输出关联
 				close(pipefd[0]);
-				dup2(pipefd[1], STDOUT_FILENO);
+				dup2(pipefd[1], fileno(stdout));
 			}
 			else if(p_cmd->flag & OUT_DI){
 					out_fd = open(p_cmd->out_file, O_WRONLY|O_CREAT, 0666);
@@ -402,8 +402,7 @@ void do_command()
 				pid_t pid2 = fork();
 				if(pid2 == 0){
 					close(pipefd[1]);
-					dup2(pipefd[0], STDIN_FILENO);
-					printf("hahha\n");
+					dup2(pipefd[0], fileno(stdin));
 					execvp(p_cmd->command2, p_cmd->para2);
 				}
 				else{
