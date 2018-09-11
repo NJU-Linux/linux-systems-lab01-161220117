@@ -228,10 +228,16 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	add_history(command);
 	write_history(NULL);
 	parse_command();
+	cmd_pos[cmd_cnt++] = 0;	//第一个指令从0开始
 	for(int i = 0; i<p_cmd->para_count; i++){
 		if(!strcmp(p_cmd->line[i], "|")){
 			pipe_cnt++;
+			p_cmd->line[i] = NULL;
+			cmd_pos[cmd_cnt++] = i;
 		}
+	}
+	for(int i = 0; i<p_cmd->para_count; i++){
+		printf("line:%s\n", p_cmd->line[i]);
 	}
 	return 0;
 }
