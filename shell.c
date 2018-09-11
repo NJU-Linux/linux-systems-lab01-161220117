@@ -394,11 +394,11 @@ void pipe_command()
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
-					close(pipefd_odd[1]);
+					//close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
 				}
 				else{
-					close(pipefd_even[1]);
+					//close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
 				}
 			}
