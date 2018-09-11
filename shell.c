@@ -362,19 +362,19 @@ void pipe_command()
 	int pipefd_odd[2];
 	int pipefd_even[2];
 	int in_fd = -1, out_fd = -1;
+	pid_t pid;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; i_cmd++){
 		int if_odd = 0;
 		printf("hahah\n");
 		if(i_cmd%2 == 0){
-			int ret = pipe(pipefd_even);
-			printf("ret:%d\n", ret);
+			pipe(pipefd_even);
 		}
 		else{
 			if_odd = 1;
 			pipe(pipefd_odd);
 		}
 		char* pcmd[64] = {};
-		pid_t pid = fork();
+		pid = fork();
 		/*子进程*/
 		if(pid == 0){
 			printf("i_cmd:%d in 377\n", i_cmd);
