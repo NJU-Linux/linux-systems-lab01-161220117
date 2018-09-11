@@ -372,7 +372,7 @@ void pipe_command()
 			if_odd = 1;
 			pipe(pipefd_odd);
 		}
-		char* pcmd[64] = {};int pcmd_cnt = 0;
+		char* pcmd[64] = {}; int pcmd_cnt = 0;
 		pid = fork();
 		/*子进程*/
 		if(pid == -1){
@@ -391,29 +391,36 @@ void pipe_command()
 			if(i_cmd == 0){	//第一个指令把1与输出关联
 				close(pipefd_even[0]);
 				dup2(pipefd_even[1], STDOUT_FILENO);
+				close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
 				if(if_odd){
-					//close(pipefd_odd[1]);
+					close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
+					close(pipefd_odd[0]);
 				}
 				else{
-					//close(pipefd_even[1]);
+					close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
+					close(pipefd_even[0]);
 				}
 			}
 			else{	//中间指令，如果为奇，把偶的读与输入关联，奇的写与输出关联
 				if(if_odd){
 					close(pipefd_even[1]);
 					dup2(pipefd_even[0], STDIN_FILENO);
+					close(pipefd_even[0]);
 					close(pipefd_odd[0]);
 					dup2(pipefd_odd[1], STDOUT_FILENO);
+					close(pipefd_odd[1]);
 				}
 				else{
 					close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
+					close(pipefd_odd[0]);
 					close(pipefd_even[0]);
 					dup2(pipefd_even[1], STDOUT_FILENO);
+					close(pipefd_even[1]);
 				}
 			}
 			/*处理重定向*/
