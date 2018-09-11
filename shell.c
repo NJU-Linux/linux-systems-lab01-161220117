@@ -394,7 +394,7 @@ void pipe_command()
 				//close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){	//最后一个指令把0与输入关联
-				if(if_odd){
+				if(i_cmd % 2 != 0){
 					//close(pipefd_odd[1]);
 					dup2(pipefd_odd[0], STDIN_FILENO);
 					//close(pipefd_odd[0]);
@@ -446,18 +446,18 @@ void pipe_command()
 				printf("pcmd:%s ", pcmd[i]);
 			}
 			printf("\n");
-			close(pipefd_odd[0]); close(pipefd_odd[1]);
-			close(pipefd_even[0]); close(pipefd_even[1]);
+			//close(pipefd_odd[0]); close(pipefd_odd[1]);
+			//close(pipefd_even[0]); close(pipefd_even[1]);
 			execvp(pcmd[0], pcmd);
 		}
 		/*父进程*/
-		else{
+		//else{
 			if(i_cmd == 0){
 				close(pipefd_even[0]);
 				//close(pipefd_even[1]);
 			}
 			else if(i_cmd == cmd_cnt - 1){
-				if(if_odd){
+				if(i_cmd % 2 != 0){
 					close(pipefd_odd[0]);
 					//close(pipefd_odd[1]);
 				}
@@ -483,7 +483,7 @@ void pipe_command()
 				close(out_fd);
 			}
 			waitpid(pid, &status, 0);
-		}
+		//}
 		//waitpid(pid, NULL, 0);
 		i_cmd++;
 	}
