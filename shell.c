@@ -39,6 +39,7 @@ struct parsed_cmd
 	char* para2[32]; int para2_cnt;
 };
 char current_dir[maxn_dirname];
+char full_cur_dir[maxn_dirname];
 char hostname[maxn_hostname];
 char prompt[maxn_prompt];
 struct passwd* pass_wd;
@@ -453,7 +454,7 @@ void do_command()
 		history_command();
 	}
 	else if(!strcmp(p_cmd->command1, "pwd")){
-		printf("%s\n", current_dir);
+		printf("%s\n", full_cur_dir);
 	}
 	else{	
 		if(!strcmp(p_cmd->command1, "!!")){
@@ -519,7 +520,11 @@ int main(int argc, char* argv[])
 			cmd_pos[i] = 0;
 		}
 		do_prompt();
-		printf("current_dir:%s\n", current_dir);
+		strcpy(full_cur_dir, pass_wd->pw_dir);
+		strcat(full_cur_dir, "/");
+		if(strcmp(current_dir, "~")){
+			strcat(full_cur_dir, current_dir);
+		}
 		read_command();
 		do_command();	
 	}
