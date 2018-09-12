@@ -178,7 +178,7 @@ void parse_command()
 			cmd_pos[cmd_cnt++] = i+1;
 		}
 	}
-#ifdef DEBUG
+/*#ifdef DEBUG
 	printf("this is cmd1\n");
 	printf("%s ", p_cmd->command1);
 	for(int i = 0; i<p_cmd->para1_cnt; i++){
@@ -199,7 +199,7 @@ void parse_command()
 	else if(p_cmd->out_file){
 		printf("out file:%s\n", p_cmd->out_file);
 	}
-#endif
+#endif*/
 	return;
 }
 int read_command()	//最后一个参数后面要NULL才可以,第一个参数要直接是指令才行
@@ -514,7 +514,6 @@ int main(int argc, char* argv[])
 	chdir(pass_wd->pw_dir);
 	read_history(NULL);
 	while(1){	
-		printf("current_dir:%s\n", current_dir);
 		pipe_cnt = 0; cmd_cnt = 0;
 		for(int i = 0; i<64; i++){
 			cmd_pos[i] = 0;
