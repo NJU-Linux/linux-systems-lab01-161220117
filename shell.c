@@ -225,7 +225,6 @@ void cd_command()
 		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
 		char* home_dir = NULL;
 		/*!!!!!!!!!!!!!!!!!一定要初始化!!!!!!!!!!!!!!!!!*/
-		printf("para1:%s\n", p_cmd->para1[1]);
 		if(!strncmp(p_cmd->para1[1], "~", 1)){
 			home_dir = malloc(strlen(pass_wd->pw_dir));
 			strcpy(home_dir, pass_wd->pw_dir);
@@ -244,7 +243,7 @@ void cd_command()
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 		}
 		strcpy(current_dir, dest_dir);
-#ifdef DEBUG
+/*#ifdef DEBUG
 		char* pwd = malloc(64);
 		if(!getcwd(pwd, 64)){
 			perror("getcwd error\n");
@@ -252,7 +251,7 @@ void cd_command()
 		}
 		printf("pwd:%s\n", pwd);
 		free(pwd);
-#endif
+#endif*/
 		if(home_dir)
 			free(home_dir);
 	}
