@@ -1,12 +1,10 @@
+.
+..
+a.txt
 b.txt
-.txt
-b.txt
-cat
-c.txt
 .git
 Makefile
 mysh
 myshell.h
 README.md
 shell.c
-wc

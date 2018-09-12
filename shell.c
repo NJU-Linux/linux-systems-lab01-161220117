@@ -510,6 +510,7 @@ int main(int argc, char* argv[])
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());
 	strncpy(current_dir, pass_wd->pw_dir, sizeof(current_dir));
+	printf("current_dir:%s\n", current_dir);
 	read_history(NULL);
 	while(1){	
 		pipe_cnt = 0; cmd_cnt = 0;
