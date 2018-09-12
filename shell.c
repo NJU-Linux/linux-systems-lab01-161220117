@@ -513,11 +513,13 @@ int main(int argc, char* argv[])
 	chdir(pass_wd->pw_dir);
 	read_history(NULL);
 	while(1){	
+		printf("current_dir:%s\n", current_dir);
 		pipe_cnt = 0; cmd_cnt = 0;
 		for(int i = 0; i<64; i++){
 			cmd_pos[i] = 0;
 		}
 		do_prompt();
+		printf("current_dir:%s\n", current_dir);
 		read_command();
 		do_command();	
 	}
