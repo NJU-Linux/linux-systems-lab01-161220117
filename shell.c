@@ -248,7 +248,7 @@ void cd_command()
 				strcat(current_dir, "/");
 				strcat(current_dir, dest_dir);
 		}
-		else{
+		else if(strncmp(p_cmd->para1[1], "..", 1) || strncmp(p_cmd->para1[1], ".", 1)){
 			strcpy(current_dir, dest_dir);
 		}
 /*#ifdef DEBUG
