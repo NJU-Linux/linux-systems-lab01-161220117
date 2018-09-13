@@ -411,6 +411,10 @@ void pipe_command()
 				printf("close in fd in child\n");
 				close(in_fd);
 			}
+			if(out_fd != -1){
+				printf("clsoe outfd in child\n");
+				close(out_fd);
+			}
 			execvp(pcmd[0], pcmd);
 		}
 		//父进程
