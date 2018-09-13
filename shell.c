@@ -241,6 +241,7 @@ void cd_command()
 		int ret = chdir(dest_dir);
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
+			return;
 		}
 		if(!strncmp(current_dir, "~", 1)){
 			if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
@@ -408,25 +409,25 @@ void pipe_command()
 			}
 			printf("\n");*/
 			if(in_fd != -1){
-				printf("close in fd in child\n");
+				//printf("close in fd in child\n");
 				close(in_fd);
 			}
 			if(out_fd != -1){
-				printf("clsoe outfd in child\n");
+				//printf("clsoe outfd in child\n");
 				close(out_fd);
 			}
 			execvp(pcmd[0], pcmd);
 		}
 		//父进程
 		else{
-			printf("father pid:%d\n", pid);
+			/*printf("father pid:%d\n", pid);
 			if(in_fd != -1){
 				printf("close in fd in father\n");
 				close(in_fd);
 			}
 			if(out_fd != -1){
 				close(out_fd);
-			}
+			}*/
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}

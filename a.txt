@@ -1,3 +1,4 @@
+clsoe outfd in child
 .
 ..
 a.txt
@@ -9,13 +10,3 @@ mysh
 myshell.h
 README.md
 shell.c
-h
-README.md
-shell.c
-13 22:33 b.txt
--rw-rw-r-- 1 tsm tsm     6 9月  12 22:30 c.txt
--rw-rw-r-- 1 tsm tsm   249 9月  11 10:50 Makefile
--rwxrwxr-x 1 tsm tsm 17548 9月  12 22:46 mysh
--rw-rw-r-- 1 tsm tsm    89 9月   7 20:16 myshell.h
--rw-rw-r-- 1 tsm tsm   104 9月  12 22:49 README.md
--rw-rw-r-- 1 tsm tsm 13319 9月  12 22:46 shell.c
