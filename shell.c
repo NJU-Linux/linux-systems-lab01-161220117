@@ -383,10 +383,12 @@ void pipe_command()
 				else if(!strcmp(p_cmd->line[i_current_pos], ">")){
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT, 0666);
 					dup2(out_fd, STDOUT_FILENO);
+					break;
 				}
 				else if(!strcmp(p_cmd->line[i_current_pos], ">>")){
 					out_fd = open(p_cmd->line[++i_current_pos], O_WRONLY|O_CREAT|O_TRUNC, 0666);
 					dup2(out_fd, STDOUT_FILENO);
+					break;
 				}
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
 				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
@@ -476,7 +478,7 @@ void do_command()
 				}
 				else if(p_cmd->flag & IN_DI){
 					//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
-					in_fd = open(p_cmd->in_file, O_RDONLY, 0666);
+					in_fd = open(p_cmd->in_file, O_RDONLY|O_CREAT, 0666);
 					dup2(in_fd, STDIN_FILENO);
 				}
 				execvp(p_cmd->command1, p_cmd->para1);
