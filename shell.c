@@ -410,6 +410,7 @@ void pipe_command()
 		}
 		//父进程
 		else{
+			printf("father pid:%d\n", pid);
 			if(in_fd != -1){
 				close(in_fd);
 			}
