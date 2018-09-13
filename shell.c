@@ -242,7 +242,13 @@ void cd_command()
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 		}
-		strcpy(current_dir, dest_dir);
+		if(!strncmp(current_dir, "~", 1)){
+			if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
+				strcat(current_dir, dest_dir);
+		}
+		else{
+			strcpy(current_dir, dest_dir);
+		}
 /*#ifdef DEBUG
 		char* pwd = malloc(64);
 		if(!getcwd(pwd, 64)){
