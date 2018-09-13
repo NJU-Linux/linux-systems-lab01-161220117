@@ -244,6 +244,7 @@ void cd_command()
 		}
 		if(!strncmp(current_dir, "~", 1)){
 			if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
+				strcat(current_dir, "/");
 				strcat(current_dir, dest_dir);
 		}
 		else{
@@ -526,10 +527,17 @@ int main(int argc, char* argv[])
 			cmd_pos[i] = 0;
 		}
 		do_prompt();
-		strcpy(full_cur_dir, pass_wd->pw_dir);
+		/*strcpy(full_cur_dir, pass_wd->pw_dir);
 		strcat(full_cur_dir, "/");
 		if(strcmp(current_dir, "~")){
 			strcat(full_cur_dir, current_dir);
+		}*/
+		if(!strncmp(current_dir, "~", 1)){
+			strcpy(full_cur_dir, pass_wd->pw_dir);
+			strcat(full_cur_dir, current_dir+1);
+		}
+		else{
+			strcpy(full_cur_dir, current_dir);
 		}
 		read_command();
 		do_command();	
