@@ -67,6 +67,7 @@ int do_prompt()
 		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
 		strcpy(current_dir, temp_dir);
 	}
+	printf("current_dir:%s\n", current_dir);
 	sprintf(prompt+strlen(prompt), "\033[1m\033[34m%s\033[0m\033[0m$ ", current_dir);
 	return 0;
 }
