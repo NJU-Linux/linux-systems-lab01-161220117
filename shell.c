@@ -238,7 +238,7 @@ void cd_command()
 			dest_dir = malloc(strlen(p_cmd->para1[1]));
 			strcpy(dest_dir, p_cmd->para1[1]);
 		}
-		int ret = chdir(dest_dir);
+		int ret = chdir(dest_dir);printf("current_dir:%s\n", current_dir);
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 			return;
@@ -251,7 +251,7 @@ void cd_command()
 		else if(strncmp(p_cmd->para1[1], "..", 1) || strncmp(p_cmd->para1[1], ".", 1)){
 			strcpy(current_dir, dest_dir);
 		}
-		printf("current_dir:%s\n", current_dir);
+		
 /*#ifdef DEBUG
 		char* pwd = malloc(64);
 		if(!getcwd(pwd, 64)){
