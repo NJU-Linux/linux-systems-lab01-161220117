@@ -238,11 +238,12 @@ void cd_command()
 			dest_dir = malloc(strlen(p_cmd->para1[1]));
 			strcpy(dest_dir, p_cmd->para1[1]);
 		}
-		int ret = chdir(dest_dir);printf("current_dir:%s\n", current_dir);
+		int ret = chdir(dest_dir);
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 			return;
 		}
+		printf("current_dir:%s\n", current_dir);
 		if(!strncmp(current_dir, "~", 1)){
 			if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
 				strcat(current_dir, "/");
