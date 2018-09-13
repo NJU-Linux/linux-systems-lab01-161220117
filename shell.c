@@ -67,7 +67,6 @@ int do_prompt()
 		strcat(temp_dir+1, current_dir+strlen(pass_wd->pw_dir));
 		strcpy(current_dir, temp_dir);
 	}
-	printf("current_dir:%s\n", current_dir);
 	sprintf(prompt+strlen(prompt), "\033[1m\033[34m%s\033[0m\033[0m$ ", current_dir);
 	return 0;
 }
@@ -239,6 +238,7 @@ void cd_command()
 			dest_dir = malloc(strlen(p_cmd->para1[1]));
 			strcpy(dest_dir, p_cmd->para1[1]);
 		}
+		printf("dest_dir:%s\n", dest_dir);
 		int ret = chdir(dest_dir);
 		if(ret){
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
@@ -508,7 +508,7 @@ int main(int argc, char* argv[])
 		assert(argv[i]); // specification
 		printf("argv[%d] = %s\n", i, argv[i]);
  		} 
-	//getcwd(current_dir, sizeof(current_dir));//初始化认为在~中,当用到cd的时候再更换看当前目录
+	//初始化认为在~中,当用到cd的时候再更换看当前目录
 	p_cmd = malloc(sizeof(struct parsed_cmd));
 	pass_wd = malloc(sizeof(struct passwd));
 	pass_wd = getpwuid(getuid());
