@@ -336,6 +336,7 @@ void history_command()
 	}
 	return;
 }
+
 void pipe_command()
 {
 	int status;
@@ -407,7 +408,7 @@ void pipe_command()
 			}
 			printf("\n");*/
 			if(in_fd != -1){
-				printf("close in fd in father\n");
+				printf("close in fd in child\n");
 				close(in_fd);
 			}
 			execvp(pcmd[0], pcmd);
