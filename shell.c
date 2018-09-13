@@ -406,7 +406,10 @@ void pipe_command()
 				printf("pcmd:%s ", pcmd[i]);
 			}
 			printf("\n");*/
-			printf("this is in childpid\n");
+			if(in_fd != -1){
+				printf("close in fd in father\n");
+				close(in_fd);
+			}
 			execvp(pcmd[0], pcmd);
 		}
 		//父进程
