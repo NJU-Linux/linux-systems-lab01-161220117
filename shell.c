@@ -244,13 +244,15 @@ void cd_command()
 			return;
 		}
 		printf("current_dir:%s\n", current_dir);
-		if(!strncmp(current_dir, "~", 1)){
-			if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
-				strcat(current_dir, "/");
-				strcat(current_dir, dest_dir);
-		}
-		else if(strncmp(p_cmd->para1[1], "..", 1) || strncmp(p_cmd->para1[1], ".", 1)){
-			strcpy(current_dir, dest_dir);
+		if(strncmp(p_cmd->para1[1], "..", 1) || strncmp(p_cmd->para1[1], ".", 1)){
+			if(!strncmp(current_dir, "~", 1)){
+				if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
+					strcat(current_dir, "/");
+					strcat(current_dir, dest_dir);
+			}
+			else {
+				strcpy(current_dir, dest_dir);
+			}
 		}
 		
 /*#ifdef DEBUG
