@@ -173,9 +173,11 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 	parsed_cmd_init();
 	free(command);
 	command = readline(prompt);
-	add_history(command);
-	write_history(NULL);
-	parse_command();
+	if(command){
+		add_history(command);
+		write_history(NULL);
+		parse_command();			
+	}
 #ifdef DEBUG
 	for(int i = 0; i<p_cmd->para_count; i++){
 		printf("line %d:%s ", i, p_cmd->line[i]);
@@ -414,7 +416,10 @@ void do_command()
 {
 	int in_fd = -1; int out_fd = -1;
 	int status;
-	if(!strcmp(p_cmd->command1, "exit")){
+	if(!p_cmd->command1){
+		return;
+	}
+	else if(!strcmp(p_cmd->command1, "exit")){
 		exit(0);
 	}
 	else if(!strcmp(p_cmd->command1, "help")){
