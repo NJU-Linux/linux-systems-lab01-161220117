@@ -126,17 +126,17 @@ void parse_command()
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 				}*/
 			}
-			/*if(strstr(p_cmd->line[i], "|")){
+			if(strstr(p_cmd->line[i], "|")){
 				p_cmd->flag |= IF_PIPE;
-				p_cmd->command2 = malloc(len);
+				/*p_cmd->command2 = malloc(len);
 				if(strlen(p_cmd->line[i]) == 1){
 					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
 					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));
 					strcpy(p_cmd->command2, p_cmd->line[++i]);
 					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
 					which_cmd = 2;
-				}
-			}*/
+				}*/
+			}
 			if(!strcmp(p_cmd->line[i], "<<") || !strcmp(p_cmd->line[i], "<")){
 				p_cmd->flag |= IN_DI;
 				is_para = 0;
@@ -417,14 +417,6 @@ void pipe_command()
 		}
 		//父进程
 		else{
-			/*printf("father pid:%d\n", pid);
-			if(in_fd != -1){
-				printf("close in fd in father\n");
-				close(in_fd);
-			}
-			if(out_fd != -1){
-				close(out_fd);
-			}*/
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}
