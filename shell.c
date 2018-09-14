@@ -37,8 +37,8 @@ struct parsed_cmd
 	char* line[64];	//用para_count和line实现multiple pipe的实现
 	char* command1;
 	char* para1[32]; int para1_cnt;
-	char* command2;
-	char* para2[32]; int para2_cnt;
+	//char* command2;
+	//char* para2[32]; int para2_cnt;
 };
 char current_dir[maxn_dirname];
 char full_cur_dir[maxn_dirname];
@@ -82,12 +82,10 @@ void parsed_cmd_init()
 		p_cmd->line[i] = NULL;
 	}
 	p_cmd->command1 = NULL;
-	//p_cmd->command2 = NULL;
 	for(int i = 0; i<32; i++){
 		p_cmd->para1[i] = NULL;
-		//p_cmd->para2[i] = NULL;
 	}
-	p_cmd->para1_cnt = 0; //p_cmd->para2_cnt = 0;
+	p_cmd->para1_cnt = 0;
 	return;
 }
 void parse_command()
@@ -99,7 +97,6 @@ void parse_command()
 		temp = strtok(NULL, " ");
 	}
 	free(temp);
-	//int which_cmd = 1;
 	int is_para = 1;
 	for(int i = 0; i<p_cmd->para_count; i++){
 		int len = strlen(p_cmd->line[i]);
@@ -117,25 +114,11 @@ void parse_command()
 			if(p_cmd->line[i][len-1] == '&'){
 				p_cmd->flag |= IF_BG;
 				p_cmd->line[i][len-1] = 0;
-				//if(which_cmd == 1){
-					p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
-					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
-				//}
-				/*else{
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
-				}*/
+				p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
+				strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
 			}
 			if(strstr(p_cmd->line[i], "|")){
 				p_cmd->flag |= IF_PIPE;
-				/*p_cmd->command2 = malloc(len);
-				if(strlen(p_cmd->line[i]) == 1){
-					p_cmd->command2 = malloc(strlen(p_cmd->line[i+1]));
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(strlen(p_cmd->line[i+1]));
-					strcpy(p_cmd->command2, p_cmd->line[++i]);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
-					which_cmd = 2;
-				}*/
 			}
 			if(!strcmp(p_cmd->line[i], "<<") || !strcmp(p_cmd->line[i], "<")){
 				p_cmd->flag |= IN_DI;
@@ -156,14 +139,8 @@ void parse_command()
 				strcpy(p_cmd->out_file, p_cmd->line[++i]);
 			}
 			else{
-				//if(is_para && which_cmd == 1){
 					p_cmd->para1[p_cmd->para1_cnt] = malloc(len);
 					strcpy(p_cmd->para1[p_cmd->para1_cnt++], p_cmd->line[i]);
-				//}
-				/*else if(is_para && which_cmd == 2){
-					p_cmd->para2[p_cmd->para2_cnt] = malloc(len);
-					strcpy(p_cmd->para2[p_cmd->para2_cnt++], p_cmd->line[i]);
-				}*/
 			}
 		}
 	}
@@ -182,14 +159,6 @@ void parse_command()
 		printf("%s ", p_cmd->para1[i]);
 	}
 	printf("\n");
-	/*if(p_cmd->para2_cnt){
-		printf("this is cmd2\n");
-		printf("%s ", p_cmd->command2);
-		for(int i = 0; i<p_cmd->para2_cnt; i++){
-			printf("%s ", p_cmd->para2[i]);
-		}
-		printf("\n");
-	}*/
 	if(p_cmd->in_file){
 		printf("in file :%s\n", p_cmd->in_file);
 	}
@@ -352,7 +321,6 @@ void pipe_command()
 			pipe(pipefd_odd);
 		}
 		char* pcmd[64] = {}; int pcmd_cnt = 0;
-		//int i_current_pos = cmd_pos[i_cmd];
 		pid = fork();
 		/*子进程*/
 		if(pid == 0){
@@ -405,12 +373,11 @@ void pipe_command()
 				printf("pcmd:%s ", pcmd[i]);
 			}
 			printf("\n");*/
+			/*要在这里关才行，不然到下一个fork的时候上一个的fd没关行为就会非常诡异了*/
 			if(in_fd != -1){
-				//printf("close in fd in child\n");
 				close(in_fd);
 			}
 			if(out_fd != -1){
-				//printf("clsoe outfd in child\n");
 				close(out_fd);
 			}
 			execvp(pcmd[0], pcmd);
@@ -445,7 +412,6 @@ void pipe_command()
 }
 void do_command()
 {
-	//int pipefd[2] = {0, 0};
 	int in_fd = -1; int out_fd = -1;
 	int status;
 	if(!strcmp(p_cmd->command1, "exit")){
@@ -485,7 +451,6 @@ void do_command()
 					dup2(out_fd, STDOUT_FILENO);
 				}
 				else if(p_cmd->flag & IN_DI){
-					//in_fd = open(p_cmd->in_file, O_CREATE|O_RDONLY)
 					in_fd = open(p_cmd->in_file, O_RDONLY|O_CREAT, 0666);
 					dup2(in_fd, STDIN_FILENO);
 				}
@@ -528,11 +493,6 @@ int main(int argc, char* argv[])
 			cmd_pos[i] = 0;
 		}
 		do_prompt();
-		/*strcpy(full_cur_dir, pass_wd->pw_dir);
-		strcat(full_cur_dir, "/");
-		if(strcmp(current_dir, "~")){
-			strcat(full_cur_dir, current_dir);
-		}*/
 		if(!strncmp(current_dir, "~", 1)){
 			strcpy(full_cur_dir, pass_wd->pw_dir);
 			strcat(full_cur_dir, current_dir+1);

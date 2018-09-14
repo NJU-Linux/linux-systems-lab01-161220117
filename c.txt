@@ -1,4 +1,11 @@
+.
+..
+a.txt
+b.txt
 c.txt
-hahaha
-40404040
-4040404040
+.git
+Makefile
+mysh
+myshell.h
+README.md
+shell.c
