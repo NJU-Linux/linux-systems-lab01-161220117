@@ -1,3 +1,5 @@
+#define  _GNU_SOURCE
+
 #include<assert.h>
 #include<readline/readline.h>
 #include<readline/history.h>
@@ -243,7 +245,10 @@ void cd_command()
 			printf("\033[41;37mplease check the diretory name you entered\033[0m\n");
 			return;
 		}
-		printf("current_dir:%s\n", current_dir);
+		char buf[64];
+		strcpy(buf, get_current_dir_name());
+		printf("this is buf:%s\n",buf);
+		//printf("current_dir:%s\n", current_dir);
 		if(strncmp(p_cmd->para1[1], ".", 1)){
 			if(!strncmp(current_dir, "~", 1)){
 				if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
