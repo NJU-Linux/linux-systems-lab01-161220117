@@ -244,7 +244,7 @@ void cd_command()
 			return;
 		}
 		printf("current_dir:%s\n", current_dir);
-		if(strncmp(p_cmd->para1[1], "..", 1) || strncmp(p_cmd->para1[1], ".", 1)){
+		if(strncmp(p_cmd->para1[1], ".", 1)){
 			if(!strncmp(current_dir, "~", 1)){
 				if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
 					strcat(current_dir, "/");
