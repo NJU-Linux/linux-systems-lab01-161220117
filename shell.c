@@ -320,6 +320,7 @@ void pipe_command()
 	int in_fd = -1, out_fd = -1;
 	pid_t pid;
 	for(int i_cmd = 0; i_cmd<cmd_cnt; ){
+		int if_bg = 0;
 		int if_odd = 0;
 		if(i_cmd%2 == 0){
 			pipe(pipefd_even);
@@ -374,6 +375,7 @@ void pipe_command()
 				}
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
 				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
+				printf("i_current_pos:%s\n", p_cmd->line[i_current_pos]);
 				i_current_pos++;
 			}
 			/*下面这段printf不能加！！！！一加了也相当于被算到stdout了！会使比如第二个指令是wc -l的指令多算！！！*/
@@ -382,6 +384,13 @@ void pipe_command()
 			}
 			printf("\n");*/
 			/*要在这里关才行，不然到下一个fork的时候上一个的fd没关行为就会非常诡异了*/
+			for(int i = 0; i<pcmd_cnt; i++){
+				int len = strlen(pcmd[i]);
+				printf("pcmd[i][len]:%c\n", pcmd[i][len]);
+				if(pcmd[i][len-1] == '&'){
+					if_bg = 1;
+				}
+			}
 			if(in_fd != -1){
 				close(in_fd);
 			}
@@ -392,6 +401,9 @@ void pipe_command()
 		}
 		//父进程
 		else{
+			if(if_bg){
+				printf("[child pid]:%d\n", pid);
+			}
 			if(i_cmd == 0){
 				close(pipefd_even[1]);
 			}
@@ -413,6 +425,7 @@ void pipe_command()
 					close(pipefd_even[1]);
 				}
 			}			
+			
 			waitpid(pid, &status, 0);
 			i_cmd++;
 		}	
