@@ -1,8 +1,6 @@
-clsoe outfd in child
 .
 ..
 a.txt
-b.txt
 c.txt
 .git
 Makefile
