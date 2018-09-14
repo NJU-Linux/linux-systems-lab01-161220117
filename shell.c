@@ -235,6 +235,7 @@ void cd_command()
 			dest_dir = malloc(strlen(p_cmd->para1[1]) + strlen(home_dir));
 			strcpy(dest_dir, home_dir);
 			strcat(dest_dir, p_cmd->para1[1]+1);
+			printf("dest_dir:%s\n", dest_dir);
 		}
 		else{
 			dest_dir = malloc(strlen(p_cmd->para1[1]));
@@ -248,8 +249,12 @@ void cd_command()
 		char buf[64];
 		strcpy(buf, get_current_dir_name());
 		printf("this is buf:%s\n",buf);
+		if(!strncmp(pass_wd->pw_dir, buf, strlen(pass_wd->pw_dir))){
+			strcpy(current_dir, "~");
+			strcat(current_dir, buf+strlen(pass_wd->pw_dir));
+		}
 		//printf("current_dir:%s\n", current_dir);
-		if(strncmp(p_cmd->para1[1], ".", 1)){
+		/*if(strncmp(p_cmd->para1[1], ".", 1)){
 			if(!strncmp(current_dir, "~", 1)){
 				if(strncmp(dest_dir, "~", 1) || strncmp(dest_dir, "/", 1))
 					strcat(current_dir, "/");
@@ -258,7 +263,7 @@ void cd_command()
 			else {
 				strcpy(current_dir, dest_dir);
 			}
-		}
+		}*/
 		
 /*#ifdef DEBUG
 		char* pwd = malloc(64);
