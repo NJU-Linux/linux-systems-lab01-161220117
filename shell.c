@@ -13,7 +13,6 @@
 #include<sys/stat.h>
 #include<fcntl.h>
 
-#include"myshell.h"
 
 //#define DEBUG
 
@@ -481,10 +480,12 @@ void do_command()
 }
 int main(int argc, char* argv[])
 {
+#ifdef DEBUG
 	for (int i = 0; i < argc; i++) {
 		assert(argv[i]); // specification
 		printf("argv[%d] = %s\n", i, argv[i]);
  		} 
+#endif
 	//初始化认为在~中,当用到cd的时候再更换看当前目录
 	p_cmd = malloc(sizeof(struct parsed_cmd));
 	pass_wd = malloc(sizeof(struct passwd));

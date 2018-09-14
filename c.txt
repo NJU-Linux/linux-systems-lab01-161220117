@@ -1,11 +1,8 @@
-.
-..
-a.txt
-b.txt
-c.txt
-.git
-Makefile
-mysh
-myshell.h
-README.md
-shell.c
+total 52
+-rw-rw-r-- 1 tsm tsm    60 9月  14 09:14 a.txt
+-rw-rw-r-- 1 tsm tsm   405 9月  14 08:43 b.txt
+-rw-rw-r-- 1 tsm tsm     0 9月  14 09:14 c.txt
+-rw-rw-r-- 1 tsm tsm   249 9月  11 10:50 Makefile
+-rwxrwxr-x 1 tsm tsm 17560 9月  14 09:11 mysh
+-rw-rw-r-- 1 tsm tsm   104 9月  12 22:49 README.md
+-rw-rw-r-- 1 tsm tsm 12466 9月  14 09:11 shell.c
