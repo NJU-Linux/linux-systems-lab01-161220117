@@ -14,7 +14,7 @@
 #include<fcntl.h>
 
 
-//#define DEBUG
+#define DEBUG
 
 #define maxn_dirname 1024
 #define maxn_hostname 256
@@ -386,7 +386,7 @@ void pipe_command()
 			/*要在这里关才行，不然到下一个fork的时候上一个的fd没关行为就会非常诡异了*/
 			for(int i = 0; i<pcmd_cnt; i++){
 				int len = strlen(pcmd[i]);
-				printf("pcmd[i][len]:%c\n", pcmd[i][len]);
+				printf("pcmd[i][len-1]:%c\n", pcmd[i][len-1]);
 				if(pcmd[i][len-1] == '&'){
 					if_bg = 1;
 				}
