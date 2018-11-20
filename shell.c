@@ -14,7 +14,7 @@
 #include<fcntl.h>
 
 
-#define DEBUG
+//#define DEBUG
 
 #define maxn_dirname 1024
 #define maxn_hostname 256
@@ -58,6 +58,7 @@ int do_prompt()
 {
 	if(!gethostname(hostname, sizeof(hostname))){
 		sprintf(prompt, "\033[44;37m[myshell]\033[0m\033[1m\033[32m%s@%s\033[0m\033[0m:", pass_wd->pw_name, hostname);
+		//sprintf(prompt, "[myshell]%s@%s:", pass_wd->pw_name, hostname);
 	} 
 	else{
 		sprintf(prompt, "\033[44;37m[myshell]\033[0m\033[1m\033[32m;1m%s@???\033[0m\033[0m:", pass_wd->pw_name);
@@ -69,6 +70,7 @@ int do_prompt()
 		strcpy(current_dir, temp_dir);
 	}
 	sprintf(prompt+strlen(prompt), "\033[1m\033[34m%s\033[0m\033[0m$ ", current_dir);
+	//sprintf(prompt+strlen(prompt), "%s$ ", current_dir);
 	return 0;
 }
 void parsed_cmd_init()
@@ -171,6 +173,7 @@ int read_command()	//最后一个参数后面要NULL才可以,第一个参数要
 {
 	parsed_cmd_init();
 	free(command);
+	fflush(stdout);
 	command = readline(prompt);
 	if(command){
 		add_history(command);
@@ -375,7 +378,6 @@ void pipe_command()
 				}
 				pcmd[pcmd_cnt] = malloc(strlen(p_cmd->line[i_current_pos]));
 				strcpy(pcmd[pcmd_cnt++], p_cmd->line[i_current_pos]);
-				printf("i_current_pos:%s\n", p_cmd->line[i_current_pos]);
 				i_current_pos++;
 			}
 			/*下面这段printf不能加！！！！一加了也相当于被算到stdout了！会使比如第二个指令是wc -l的指令多算！！！*/
@@ -386,7 +388,6 @@ void pipe_command()
 			/*要在这里关才行，不然到下一个fork的时候上一个的fd没关行为就会非常诡异了*/
 			for(int i = 0; i<pcmd_cnt; i++){
 				int len = strlen(pcmd[i]);
-				printf("pcmd[i][len-1]:%c\n", pcmd[i][len-1]);
 				if(pcmd[i][len-1] == '&'){
 					if_bg = 1;
 				}
